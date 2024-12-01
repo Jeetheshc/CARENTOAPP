@@ -10,7 +10,7 @@ const Carosal = () => {
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Automatically transition slides every 3 seconds
+  // Automatically transition slides every 3 seconds slow
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
