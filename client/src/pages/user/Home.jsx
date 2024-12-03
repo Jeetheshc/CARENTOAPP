@@ -2,12 +2,16 @@ import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Carosal from '../../components/user/carosal';
+import { Card } from '../../components/user/Card'
+import { useFetch } from "../../hooks/useFetch";
+import { ProductSkelton } from '../../components/user/Skelton';
 
 export const Home = () => {
   const [fromDate, setFromDate] = useState(null);
   const [toDate, setToDate] = useState(null);
   const [location, setLocation] = useState('');
-  const [results, setResults] = useState([]);
+  
+  const [Cars, isLoading, error] = useFetch("car/cars");
 
   // List of Indian locations
   const indianLocations = [
@@ -118,22 +122,19 @@ export const Home = () => {
       </div>
 
       {/* Result Section */}
-      <div className="mt-6 w-full px-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {results.map((result) => (
-          <div key={result.id} className="border border-gray-300 rounded-lg shadow-md p-4">
-            <img
-              src={result.photo}
-              alt={result.model}
-              className="w-full h-40 object-cover rounded-md"
-            />
-            <h3 className="text-lg font-semibold ">
-              {result.brand} {result.model}
-            </h3>
-            <p className="text-gray-600">Year: {result.year}</p>
-            <p className="text-gray-600">Price: {result.price}/day</p>
-          </div>
-        ))}
+      <div className='flex flex-wrap gap-6 p-4'>
+            { isLoading ? (
+                <ProductSkelton />
+            ) : (
+                <>
+                    {Cars?.map((value) => (
+                        <Card key={value._id} cars={value} />
+                    ))}
+                </>
+            )}
+        </div>
+      
       </div>
-    </div>
+    
   );
 };

@@ -5,9 +5,9 @@ import { Outlet, useLocation } from 'react-router-dom'
 import UserHeader from '../components/user/UserHeader'
 import { axiosInstance } from '../config/axiosInstance'
 import { useDispatch, useSelector } from 'react-redux'
-import { clearUserData, saveUserData } from '../redux/features/UserSlice'
+import { saveUserData } from '../redux/features/UserSlice'
 
-export const UserLayout = () => {
+export const ProviderLayout = () => {
     const { isUserAuth, userData } = useSelector((state) => state.user)
     const dispatch = useDispatch();
     const location = useLocation();
@@ -18,10 +18,10 @@ export const UserLayout = () => {
                 method: "GET",
                 url: "/user/check-user",
             });
-            dispatch(saveUserData(response.data.user));
+            dispatch(saveUserData());
         } catch (error) {
             dispatch(clearUserData());
-            console.error("Error in checkUser:", error);
+            console.log(error);
         }
     };
 
@@ -29,9 +29,8 @@ export const UserLayout = () => {
     console.log(isUserAuth, "userauth");
     console.log(userData, "Userdata");
     useEffect(() => {
-        checkUser(); // Re-run checkUser whenever the route changes
+        checkUser();
     }, [location.pathname]);
-
 
 
     return (

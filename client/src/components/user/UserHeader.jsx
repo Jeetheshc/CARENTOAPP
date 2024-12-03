@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { DarkMode } from '../shared/Darkmode';
 
 function UserHeader() {
   const navigate = useNavigate();
@@ -9,10 +10,10 @@ function UserHeader() {
       <div className="container mx-auto flex items-center justify-between py-4 px-6">
         {/* Logo */}
         <Link to={"/"}>
-                <div>
-                    <img className='rounded-md shadow-md' src="src/assets/logo.png" alt="logo" />
-                </div>
-            </Link>
+          <div>
+            <img className='rounded-md shadow-md' src="src/assets/logo.png" alt="logo" />
+          </div>
+        </Link>
 
         {/* Navigation Links */}
         <nav>
@@ -35,13 +36,15 @@ function UserHeader() {
         {/* Profile Button */}
         <div>
           <button
-            onClick={() => navigate('/profile')}
+            onClick={() => navigate('user/profile')}
             className="bg-white text-sky-700 font-semibold px-4 py-2 rounded-md shadow-md hover:bg-blue-100 transition duration-300"
           >
             Profile
           </button>
         </div>
+        <DarkMode/>
       </div>
+      
     </div>
   );
 }

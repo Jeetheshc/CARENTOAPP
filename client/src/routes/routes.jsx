@@ -12,16 +12,18 @@ import { ProfileChangePhoto } from "../pages/user/ProfileChangePhoto";
 import { ProfileDeactivate } from "../pages/user/ProfileDeactivate";
 import { UserLayout } from "../layout/userLayout";
 import Signup from "../pages/shared/Signup";
-import Login from "../pages/shared/Login";
+import {Login} from "../pages/shared/Login";
 import ErrorPage from "../pages/shared/ErrorPage";
-
 import About from "../pages/user/About";
+import { ProtectedRoutes } from "./ProtectedRoutes";
+import { ProviderLayout } from "../layout/ProviderLayout";
+import { AdminLayout } from "../layout/AdminLayout";
 
 export const router = createBrowserRouter([
     {
         path: "/",
         element: <UserLayout />,
-        errorElement:<ErrorPage/>,
+        errorElement: <ErrorPage />,
         children: [
             {
                 path: "/",
@@ -37,18 +39,10 @@ export const router = createBrowserRouter([
             },
             {
                 path: "about",
-                element: <About/>,
+                element: <About />,
             },
             {
-                path: "carBookings",
-                element: <CarBookings />,
-            },
-            {
-                path: "carBookingsList",
-                element: <CarBookingslist />,
-            },
-            {
-                path: "carDetails",
+                path: "carDetails/:id",
                 element: <CarDetails />,
             },
             {
@@ -60,24 +54,172 @@ export const router = createBrowserRouter([
                 element: <Contact />,
             },
             {
-                path: "profile",
-                element: <Profile />,
+                element: <ProtectedRoutes />,
+              path:"user",
+                children:
+                    [
+                        {
+                            path: "carBookings",
+                            element: <CarBookings />,
+                        },
+                        {
+                            path: "carBookingsList",
+                            element: <CarBookingslist />,
+                        },
+                        {
+                            path: "profile",
+                            element: <Profile />,
+                        },
+                        {
+                            path: "profileChangePassword",
+                            element: <Profilechangepassword />,
+                        },
+                        {
+                            path: "profileChangePhoto",
+                            element: <ProfileChangePhoto />,
+                        },
+                        {
+                            path: "profileDeactivate",
+                            element: <ProfileDeactivate />,
+                        },
+                    ]
+
             },
-            {
-                path: "profileChangePassword",
-                element: <Profilechangepassword />,
-            },
-            {
-                path: "profileChangePhoto",
-                element: <ProfileChangePhoto />,
-            },
-            {
-                path: "profileDeactivate",
-                element: <ProfileDeactivate />,
-            },
+
 
         ]
     },
+    {
+        path: "provider",
+        element: <ProviderLayout />,
+        errorElement: <ErrorPage />,
+        children: [
+         
+            {
+                path: "signup",
+                element: <Signup/>,
+            },
+            {
+                path: "login",
+                element: <Login role="provider"/>,
+            },
+            {
+                path: "about",
+                element: <About />,
+            },
+            {
+                path: "carDetails/:id",
+                element: <CarDetails />,
+            },
+            {
+                path: "cars",
+                element: <Cars />,
+            },
+            {
+                path: "contact",
+                element: <Contact />,
+            },
+            {
+                element: <ProtectedRoutes />,
+              path:"user",
+                children:
+                    [
+                        {
+                            path: "carBookings",
+                            element: <CarBookings />,
+                        },
+                        {
+                            path: "carBookingsList",
+                            element: <CarBookingslist />,
+                        },
+                        {
+                            path: "profile",
+                            element: <Profile />,
+                        },
+                        {
+                            path: "profileChangePassword",
+                            element: <Profilechangepassword />,
+                        },
+                        {
+                            path: "profileChangePhoto",
+                            element: <ProfileChangePhoto />,
+                        },
+                        {
+                            path: "profileDeactivate",
+                            element: <ProfileDeactivate />,
+                        },
+                    ]
 
+            },
+
+
+        ]
+    },
+    {
+        path: "admin",
+        element: <AdminLayout />,
+        errorElement: <ErrorPage />,
+        children: [
+            
+            {
+                path: "signup",
+                element: <Signup role="admin"/>,
+            },
+            {
+                path: "login",
+                element: <Login role="admin"/>,
+            },
+            {
+                path: "about",
+                element: <About />,
+            },
+            {
+                path: "carDetails/:id",
+                element: <CarDetails />,
+            },
+            {
+                path: "cars",
+                element: <Cars />,
+            },
+            {
+                path: "contact",
+                element: <Contact />,
+            },
+            {
+                element: <ProtectedRoutes />,
+              path:"user",
+                children:
+                    [
+                        {
+                            path: "carBookings",
+                            element: <CarBookings />,
+                        },
+                        {
+                            path: "carBookingsList",
+                            element: <CarBookingslist />,
+                        },
+                        {
+                            path: "profile",
+                            element: <Profile />,
+                        },
+                        {
+                            path: "profileChangePassword",
+                            element: <Profilechangepassword />,
+                        },
+                        {
+                            path: "profileChangePhoto",
+                            element: <ProfileChangePhoto />,
+                        },
+                        {
+                            path: "profileDeactivate",
+                            element: <ProfileDeactivate />,
+                        },
+                    ]
+
+            },
+
+
+        ]
+    },
 
 ]);

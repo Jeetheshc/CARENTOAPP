@@ -1,37 +1,104 @@
-import React from 'react'
+import React from "react";
+import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { axiosInstance } from "../../config/axiosInstance";
 
-function Login() {
-  return (
-    <div className='flex items-center justify-center h-screen'>
+export const Login = ({ role = "user" }) => {
+    const { register, handleSubmit } = useForm();
+    const navigate = useNavigate();
 
-    <div class=" w-full max-w-sm p-4 border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:border-gray-700 bg-sky-700">
-        <form class="space-y-6" action="#">
-            <h5 class="text-xl font-medium text-gray-900 dark:text-white">Login</h5>
-            <div>
-                <label for="email" class="block mb-2 text-sm font-medium text-teal-100 dark:text-white">Your email</label>
-                <input type="email" name="email" id="email" class="text-teal-100 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="example@gmail.com" required />
-            </div>
-            <div>
-                <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your password</label>
-                <input type="password" name="password" id="password" placeholder="••••••••" class=" border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required />
-            </div>
-            <div class="flex items-start">
-                <div class="flex items-start">
-                    <div class="flex items-center h-5">
-                        <input id="remember" type="checkbox" value="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800" required />
-                    </div>
-                    <label for="remember" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Remember me</label>
+    const user = {
+        role: "user",
+        login_api: "/user/login",
+        profile_route: "/user/profile",
+        signup_route: "/signup",
+    };
+
+    if (role === "provider") {
+        user.role = "provider";
+        (user.login_api = "/provider/login"), (user.profile_route = "/provider/profile"), (user.signup_route = "/provider/signup");
+    }
+
+    if (role === "admin") {
+        user.role = "admin";
+        (user.login_api = "/admin/login"), (user.profile_route = "/admin/profile"), (user.signup_route = "/admin/signup");
+    }
+
+
+    const onSubmit = async (data) => {
+        try {
+            console.log(data, '====data');
+
+            const response = await axiosInstance({ method: "POST", url: user.login_api, data });
+            console.log(response, "====response");
+            toast.success("Log-in success");
+            navigate(user.profile_route);
+        } catch (error) {
+            toast.error("Log-in failed");
+            console.log(error);
+        }
+    };
+
+    return (
+        <div className="hero bg-blue-50 min-h-screen">
+            <div className="hero-content flex-col lg:flex-row-reverse">
+                {/* Text Section */}
+                <div className="text-center lg:text-left">
+                    <h1 className="text-5xl font-bold text-blue-700 mb-4 transition-transform duration-300 hover:scale-105">
+                        Login now! {role}
+                    </h1>
                 </div>
-                <a href="#" class="ms-auto text-sm text-blue-700 hover:underline dark:text-neutral-50">Reset Password?</a>
-            </div>
-            <button type="submit" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Login to your account</button>
-            <div class="text-sm font-medium text-gray-500 dark:text-gray-300">
-                Not registered? <a href="/signup" class="text-blue-700 hover:underline dark:text-gray-200">Create account</a>
-            </div>
-        </form>
-    </div>
-    </div>
-  )
-}
 
-export default Login
+                {/* Login Card */}
+                <div className="card bg-white w-full max-w-sm shrink-0 shadow-lg border border-blue-200">
+                    <form className="card-body" onSubmit={handleSubmit(onSubmit)}>
+                        {/* Email Input */}
+                        <div className="form-control">
+                            <label className="label">
+                                <span className="label-text text-blue-600 font-medium">Email</span>
+                            </label>
+                            <input
+                                type="email"
+                                {...register("email")}
+                                placeholder="Enter your email"
+                                className="input input-bordered border-blue-300 focus:ring focus:ring-blue-200 focus:border-blue-500"
+                                required
+                            />
+                        </div>
+
+                        {/* Password Input */}
+                        <div className="form-control">
+                            <label className="label">
+                                <span className="label-text text-blue-600 font-medium">Password</span>
+                            </label>
+                            <input
+                                type="password"
+                                {...register("password")}
+                                placeholder="Enter your password"
+                                className="input input-bordered border-blue-300 focus:ring focus:ring-blue-200 focus:border-blue-500"
+                                required
+                            />
+                            <label className="label">
+                                <Link
+                                    to={user.signup_route}
+                                    className="text-blue-500 hover:text-blue-700 transition-colors duration-200"
+                                >
+                                    New user?
+                                </Link>
+                            </label>
+                        </div>
+
+                        {/* Submit Button */}
+                        <div className="form-control mt-6">
+                            <button className="btn bg-blue-600 hover:bg-blue-700 text-white border-none transition-transform duration-300 hover:scale-105">
+                                Login
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    );
+};
