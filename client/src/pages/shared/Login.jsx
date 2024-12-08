@@ -84,7 +84,7 @@ export const Login = ({ role = "user" }) => {
                                     to={user.signup_route}
                                     className="text-blue-500 hover:text-blue-700 transition-colors duration-200"
                                 >
-                                    New user?
+                                    New User? CLick to Register
                                 </Link>
                             </label>
                         </div>

@@ -17,7 +17,7 @@ export const Card = ({ cars }) => {
                     ${cars?.pricePerDay} / Day
                 </p>
                 <div className="card-actions mt-4">
-                    <Link to={`/CarDetails/${cars?._id}`} className="w-full">
+                    <Link to={`/Car/${cars?._id}`} className="w-full">
                         <button className="btn btn-primary w-full py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-300">
                             Book
                         </button>

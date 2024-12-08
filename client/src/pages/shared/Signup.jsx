@@ -1,141 +1,132 @@
-import React from 'react';
+// signup.jsx
+import React from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { axiosInstance } from "../../config/axiosInstance";
 
-function Signup() {
-  return (
-    <div className="flex items-center justify-center ">
-      <div className="w-full max-w-sm p-4 border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 bg-sky-700 dark:border-gray-700">
-        <form className="space-y-6" action="#">
-          <h5 className="text-xl font-medium text-gray-900 dark:text-white">Sign Up</h5>
-          
-          {/* Name Field */}
-          <div>
-            <label
-              htmlFor="name"
-              className="block mb-2 text-sm font-medium text-teal-100 dark:text-white"
-            >
-              Full Name
-            </label>
-            <input
-              type="text"
-              name="name"
-              id="name"
-              placeholder="John Doe"
-              className="border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-              required
-            />
-          </div>
+export const Signup = () => {
+    const { register, handleSubmit } = useForm();
+    const navigate = useNavigate();
 
-          {/* Email Field */}
-          <div>
-            <label
-              htmlFor="email"
-              className="block mb-2 text-sm font-medium text-teal-100 dark:text-white"
-            >
-              Email
-            </label>
-            <input
-              type="email"
-              name="email"
-              id="email"
-              placeholder="example@gmail.com"
-              className="border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-              required
-            />
-          </div>
+    const onSubmit = async (data) => {
+        try {
+            const formData = new FormData();
+            Object.keys(data).forEach((key) => {
+                formData.append(key, data[key]);
+            });
 
-          {/* Password Field */}
-          <div>
-            <label
-              htmlFor="password"
-              className="block mb-2 text-sm font-medium text-teal-100 dark:text-white"
-            >
-              Password
-            </label>
-            <input
-              type="password"
-              name="password"
-              id="password"
-              placeholder="••••••••"
-              className="border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-              required
-            />
-          </div>
+            const response = await axiosInstance({
+                method: "POST",
+                url: "/user/signup",
+                data: formData,
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
 
-          {/* Address Field */}
-          <div>
-            <label
-              htmlFor="address"
-              className="block mb-2 text-sm font-medium text-teal-100 dark:text-white"
-            >
-              Address
-            </label>
-            <input
-              type="text"
-              name="address"
-              id="address"
-              placeholder="123 Main St"
-              className="border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-              required
-            />
-          </div>
+            toast.success("Signup successful");
+            navigate("/user/profile");
+        } catch (error) {
+            console.log(error);
+            toast.error(error.response?.data?.message || "Signup failed");
+        }
+    };
 
-          {/* Phone Field */}
-          <div>
-            <label
-              htmlFor="phone"
-              className="block mb-2 text-sm font-medium text-teal-100 dark:text-white"
-            >
-              Phone
-            </label>
-            <input
-              type="tel"
-              name="phone"
-              id="phone"
-              placeholder="123-456-7890"
-              className="border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-              required
-            />
-          </div>
+    return (
+        <div className="hero bg-green-50 min-h-screen">
+            <div className="hero-content flex-col lg:flex-row-reverse">
+                <div className="text-center lg:text-left">
+                    <h1 className="text-5xl font-bold text-green-700 mb-4 transition-transform duration-300 hover:scale-105">
+                        Sign Up Now!
+                    </h1>
+                </div>
+                <div className="card bg-white w-full max-w-sm shrink-0 shadow-lg border border-green-200">
+                    <form className="card-body" onSubmit={handleSubmit(onSubmit)}>
+                        <div className="form-control">
+                            <label className="label">
+                                <span className="label-text text-green-600 font-medium">Name</span>
+                            </label>
+                            <input
+                                type="text"
+                                {...register("name")}
+                                placeholder="Enter your name"
+                                className="input input-bordered border-green-300 focus:ring focus:ring-green-200 focus:border-green-500"
+                                required
+                            />
+                        </div>
 
-          {/* Profile Picture Field */}
-          <div>
-            <label
-              htmlFor="profilePic"
-              className="block mb-2 text-sm font-medium text-teal-100 dark:text-white"
-            >
-              Profile Picture
-            </label>
-            <input
-              type="file"
-              name="profilePic"
-              id="profilePic"
-              accept="image/*"
-              className="block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600"
-            />
-          </div>
+                        <div className="form-control">
+                            <label className="label">
+                                <span className="label-text text-green-600 font-medium">Email</span>
+                            </label>
+                            <input
+                                type="email"
+                                {...register("email")}
+                                placeholder="Enter your email"
+                                className="input input-bordered border-green-300 focus:ring focus:ring-green-200 focus:border-green-500"
+                                required
+                            />
+                        </div>
 
-          {/* Submit Button */}
-          <button
-            type="submit"
-            className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >
-            Create Account
-          </button>
+                        <div className="form-control">
+                            <label className="label">
+                                <span className="label-text text-green-600 font-medium">Password</span>
+                            </label>
+                            <input
+                                type="password"
+                                {...register("password")}
+                                placeholder="Enter your password"
+                                className="input input-bordered border-green-300 focus:ring focus:ring-green-200 focus:border-green-500"
+                                required
+                            />
+                        </div>
 
-          {/* Login Link */}
-          <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
-            Already have an account?{' '}
-            <a
-              href="/login"
-              className="text-blue-700 hover:underline dark:text-gray-200"
-            >
-              Login
-            </a>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
-}
+                        <div className="form-control">
+                            <label className="label">
+                                <span className="label-text text-green-600 font-medium">Phone</span>
+                            </label>
+                            <input
+                                type="text"
+                                {...register("phone")}
+                                placeholder="Enter your phone number"
+                                className="input input-bordered border-green-300 focus:ring focus:ring-green-200 focus:border-green-500"
+                                required
+                            />
+                        </div>
 
-export default Signup;
+                        <div className="form-control">
+                            <label className="label">
+                                <span className="label-text text-green-600 font-medium">Address</span>
+                            </label>
+                            <input
+                                type="text"
+                                {...register("address")}
+                                placeholder="Enter your address"
+                                className="input input-bordered border-green-300 focus:ring focus:ring-green-200 focus:border-green-500"
+                                required
+                            />
+                        </div>
+
+                        <div className="form-control">
+                            <label className="label">
+                                <span className="label-text text-green-600 font-medium">Profile Picture</span>
+                            </label>
+                            <input
+                                type="file"
+                                {...register("profilePic")}
+                                className="file-input file-input-bordered file-input-green-500 w-full"
+                            />
+                        </div>
+
+                        <div className="form-control mt-6">
+                            <button className="btn bg-green-600 hover:bg-green-700 text-white border-none transition-transform duration-300 hover:scale-105">
+                                Sign Up
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    );
+};

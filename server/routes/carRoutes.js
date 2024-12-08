@@ -13,16 +13,16 @@ router.get("/cars", getAllCar);
 
 
 // Edit car details
-router.put("/edit/:carId",carProviderAuth, editCarDetails);
+router.put("/edit/:id",carProviderAuth, editCarDetails);
 
 // Deactivate a car
-router.put("/deactivate/:carId", carProviderAuth, deactivateCar);
+router.put("/deactivate/:id", carProviderAuth, deactivateCar);
 
 // Show car details
-router.get("/:carId", showCarDetails);
+router.get("/:id", showCarDetails);
 
 // edit car photos
-router.put("/editphotos:carId",upload.array("carimages", 5), updateCarPhotos);
+router.put("/editphotos/:id",upload.array("carimages", 5), updateCarPhotos);
 
 
 export { router as carRouter };

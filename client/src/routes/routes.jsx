@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 
 import { CarBookings } from "../pages/user/CarBookings";
 import { CarBookingslist } from "../pages/user/CarBookingslist";
-import { CarDetails } from "../pages/user/CarDetails";
+import  {CarDetails } from "../pages/user/CarDetails";
 import { Cars } from "../pages/user/cars";
 import { Contact } from "../pages/user/Contact";
 import { Home } from "../pages/user/Home";
@@ -11,7 +11,7 @@ import { Profilechangepassword } from "../pages/user/profilechangepassword";
 import { ProfileChangePhoto } from "../pages/user/ProfileChangePhoto";
 import { ProfileDeactivate } from "../pages/user/ProfileDeactivate";
 import { UserLayout } from "../layout/userLayout";
-import Signup from "../pages/shared/Signup";
+import { Signup } from "../pages/shared/Signup";
 import {Login} from "../pages/shared/Login";
 import ErrorPage from "../pages/shared/ErrorPage";
 import About from "../pages/user/About";
@@ -42,7 +42,7 @@ export const router = createBrowserRouter([
                 element: <About />,
             },
             {
-                path: "carDetails/:id",
+                path: "car/:id",
                 element: <CarDetails />,
             },
             {

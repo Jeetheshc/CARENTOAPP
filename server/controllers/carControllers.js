@@ -85,18 +85,22 @@ export const deactivateCar = async (req, res) => {
 // Show car details
 export const showCarDetails = async (req, res) => {
   try {
-    const { carId } = req.params;
+    const { id } = req.params;
 
-    const car = await Car.findById(carId).populate("provider", "name email"); // Populates provider details
+
+    const car = await Car.findById(id);
+
     if (!car) {
       return res.status(404).json({ message: "Car not found" });
     }
 
-    res.status(200).json({ car });
+    res.status(200).json({ data:car });
   } catch (error) {
+    console.error("Error fetching car details:", error);
     res.status(500).json({ message: error.message || "Internal server error" });
   }
 };
+
 
 export const updateCarPhotos = async (req, res) => {
   try {
