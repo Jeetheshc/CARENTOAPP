@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 
 import { CarBookings } from "../pages/user/CarBookings";
-import { CarBookingslist } from "../pages/user/CarBookingslist";
+
 import  {CarDetails } from "../pages/user/CarDetails";
 import { Cars } from "../pages/user/cars";
 import { Contact } from "../pages/user/Contact";
@@ -18,6 +18,7 @@ import About from "../pages/user/About";
 import { ProtectedRoutes } from "./ProtectedRoutes";
 import { ProviderLayout } from "../layout/ProviderLayout";
 import { AdminLayout } from "../layout/AdminLayout";
+import { Carbookinglists } from "../pages/user/Carbookinglists";
 
 export const router = createBrowserRouter([
     {
@@ -53,22 +54,24 @@ export const router = createBrowserRouter([
                 path: "contact",
                 element: <Contact />,
             },
+           
             {
                 element: <ProtectedRoutes />,
               path:"user",
                 children:
                     [
+                       
                         {
-                            path: "carBookings",
-                            element: <CarBookings />,
-                        },
-                        {
-                            path: "carBookingsList",
-                            element: <CarBookingslist />,
+                            path: "Carbookinglists",
+                            element: <Carbookinglists/>,
                         },
                         {
                             path: "profile",
                             element: <Profile />,
+                        },
+                        {
+                            path: "carBookings",
+                            element: <CarBookings />,
                         },
                         {
                             path: "profileChangePassword",
@@ -129,8 +132,8 @@ export const router = createBrowserRouter([
                             element: <CarBookings />,
                         },
                         {
-                            path: "carBookingsList",
-                            element: <CarBookingslist />,
+                            path: "Carbookinglists",
+                            element: <Carbookinglists />,
                         },
                         {
                             path: "profile",
@@ -195,8 +198,8 @@ export const router = createBrowserRouter([
                             element: <CarBookings />,
                         },
                         {
-                            path: "carBookingsList",
-                            element: <CarBookingslist />,
+                            path: "Carbookinglists",
+                            element: <Carbookinglists />,
                         },
                         {
                             path: "profile",

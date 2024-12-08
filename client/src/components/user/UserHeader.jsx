@@ -28,7 +28,7 @@ function UserHeader() {
               <Link to="/cars" className="hover:text-blue-300 transition">Cars</Link>
             </li>
             <li>
-              <Link to="/carbookinglist" className="hover:text-blue-300 transition">Bookings</Link>
+              <Link to="/user/Carbookinglists" className="hover:text-blue-300 transition">Bookings</Link>
             </li>
           </ul>
         </nav>

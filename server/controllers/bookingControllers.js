@@ -16,6 +16,12 @@ export const createBooking = async (req, res) => {
             return res.status(404).json({ message: "Car not found" });
         }
 
+        // Calculate total days and total price
+        const fromDate = new Date(fromTime);
+        const toDate = new Date(toTime);
+        const rentalDays = Math.ceil((toDate - fromDate) / (1000 * 60 * 60 * 24));
+        const totalPrice = rentalDays * car.pricePerDay;
+
         // Create booking
         const newBooking = new Booking({
             carId,
@@ -25,6 +31,7 @@ export const createBooking = async (req, res) => {
             location,
             fromTime,
             toTime,
+            totalPrice,
         });
 
         await newBooking.save();
@@ -33,6 +40,7 @@ export const createBooking = async (req, res) => {
         res.status(500).json({ message: error.message || "Internal Server Error" });
     }
 };
+
 
 // Get all bookings
 export const getBookings = async (req, res) => {

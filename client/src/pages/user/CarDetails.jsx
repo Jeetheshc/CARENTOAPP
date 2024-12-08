@@ -1,15 +1,35 @@
-import React from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { useFetch } from "../../hooks/useFetch";
-import { ProductSkelton } from '../../components/user/Skelton';
+import { ProductSkelton } from "../../components/user/Skelton";
 
 export const CarDetails = () => {
   const { id } = useParams();
   const [Cars, isLoading] = useFetch(`car/${id}`);
   const navigate = useNavigate();
 
-  const handleBookNow = () => {
-    navigate(`/booking/${id}`); // Navigate to booking page with car ID
+  const [formData, setFormData] = useState({
+    fromDate: "",
+    toDate: "",
+    location: "",
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleProceed = () => {
+    const { fromDate, toDate, location } = formData;
+
+    if (!fromDate || !toDate || !location) {
+      alert("Please fill in all the details.");
+      return;
+    }
+
+    navigate("/user/carBookings", {
+      state: { carDetails: Cars, bookingDetails: formData },
+    });
   };
 
   return (
@@ -37,11 +57,53 @@ export const CarDetails = () => {
               </li>
             ))}
           </ul>
+
+          <div className="mt-4">
+            <label className="block text-gray-600 text-sm mb-2">From Date:</label>
+            <input
+              type="date"
+              name="fromDate"
+              value={formData.fromDate}
+              min={new Date().toISOString().split("T")[0]} // Disable past dates
+              onChange={handleInputChange}
+              className="w-full border border-gray-300 rounded-md p-2 mb-4"
+            />
+
+            <label className="block text-gray-600 text-sm mb-2">To Date:</label>
+            <input
+              type="date"
+              name="toDate"
+              value={formData.toDate}
+              min={
+                formData.fromDate
+                  ? new Date(new Date(formData.fromDate).getTime() + 86400000)
+                      .toISOString()
+                      .split("T")[0]
+                  : new Date().toISOString().split("T")[0]
+              }
+              onChange={handleInputChange}
+              className="w-full border border-gray-300 rounded-md p-2 mb-4"
+            />
+
+            <label className="block text-gray-600 text-sm mb-2">Location:</label>
+            <select
+              name="location"
+              value={formData.location}
+              onChange={handleInputChange}
+              className="w-full border border-gray-300 rounded-md p-2"
+            >
+              <option value="">Select Location</option>
+              <option value="Manjeshwar">Manjeshwar</option>
+              <option value="Kasaragod">Kasaragod</option>
+              <option value="Mangalore">Mangalore</option>
+            </select>
+          </div>
+
           <button
             className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-            onClick={handleBookNow}
+            onClick={handleProceed}
           >
-            Book Now
+            Proceed to Confirmation
           </button>
         </div>
       )}
