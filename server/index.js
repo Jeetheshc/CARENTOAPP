@@ -8,7 +8,7 @@ import cors from 'cors' ;
 dotenv.config();
 
 const app = express();
-const port = "https://carentoapp-client5.vercel.app";
+const port = 3001;
 
 // Connect to MongoDB
 connectDB();
@@ -16,7 +16,7 @@ connectDB();
 // Middleware
 app.use(express.json());
 app.use(cors({
-    origin: 'https://carentoapp-client5.vercel.app', // Allow only frontend port
+    origin: 'http://localhost:5173', // Allow only frontend port
     credentials: true, // Allow credentials (cookies, etc.)
   }));
 app.use(cookieParser());
