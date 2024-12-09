@@ -58,7 +58,7 @@ export const CarBookings = () => {
           <li><strong>To:</strong> {toDate}</li>
           <li><strong>Location:</strong> {bookingLocation}</li>
           <li><strong>Total Days:</strong> {rentalDays} {rentalDays === 1 ? "Day" : "Days"}</li>
-          <li><strong>Total Price:</strong> ${totalPrice}</li>
+          <li><strong>Total Price:</strong> Rs.{totalPrice}</li>
         </ul>
 
         <h4 className="mt-4 text-lg font-semibold">Pickup Address</h4>

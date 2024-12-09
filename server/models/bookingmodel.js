@@ -22,6 +22,9 @@ const bookingSchema = new mongoose.Schema({
     fromTime: { type: String, required: true },
     toTime: { type: String, required: true },
     status: { type: String, default: "Booked", enum: ["Booked", "Cancelled"] },
+    paymentDateTime: { type: Date, required: true }, // New field
+    paymentMode: { type: String, required: true, enum: ["Credit Card", "Debit Card", "UPI", "Cash"] }, // New field
+    totalAmountPaid: { type: Number, required: true }, // New field
 }, { timestamps: true });
 
 const Booking = mongoose.model("Booking", bookingSchema);

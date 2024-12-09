@@ -14,7 +14,7 @@ export const Card = ({ cars }) => {
             <div className="card-body p-4">
                 <h2 className="text-xl font-bold text-gray-800">{cars?.brand}</h2>
                 <p className="text-lg text-gray-600 font-semibold">
-                    ${cars?.pricePerDay} / Day
+                    Rs.{cars?.pricePerDay} / Day
                 </p>
                 <div className="card-actions mt-4">
                     <Link to={`/Car/${cars?._id}`} className="w-full">

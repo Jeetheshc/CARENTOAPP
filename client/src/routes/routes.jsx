@@ -19,6 +19,7 @@ import { ProtectedRoutes } from "./ProtectedRoutes";
 import { ProviderLayout } from "../layout/ProviderLayout";
 import { AdminLayout } from "../layout/AdminLayout";
 import { Carbookinglists } from "../pages/user/Carbookinglists";
+import { CarbookingDetails } from "../pages/user/CarbookingDetails";
 
 export const router = createBrowserRouter([
     {
@@ -72,6 +73,10 @@ export const router = createBrowserRouter([
                         {
                             path: "carBookings",
                             element: <CarBookings />,
+                        },
+                        {
+                            path: "bookings/:id",
+                            element: <CarbookingDetails />,
                         },
                         {
                             path: "profileChangePassword",

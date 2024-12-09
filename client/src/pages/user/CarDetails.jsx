@@ -48,7 +48,7 @@ export const CarDetails = () => {
           </h2>
           <p className="text-gray-500">{Cars?.year}</p>
           <p className="text-lg text-gray-600 font-semibold my-2">
-            ${Cars?.pricePerDay} / Day
+            Rs.{Cars?.pricePerDay} / Day
           </p>
           <ul className="text-gray-500 text-sm">
             {Cars?.features.map((feature, index) => (
