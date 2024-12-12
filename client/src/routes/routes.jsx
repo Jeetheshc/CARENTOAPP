@@ -8,7 +8,7 @@ import { Profile } from "../pages/user/Profile";
 import { Profilechangepassword } from "../pages/user/Profilechangepassword";
 import { ProfileChangePhoto } from "../pages/user/ProfileChangePhoto";
 import { ProfileDeactivate } from "../pages/user/ProfileDeactivate";
-import { UserLayout } from "../layout/userLayout";
+import { UserLayout } from "../layout/UserLayout";
 import { Signup } from "../pages/shared/Signup";
 import { Login } from "../pages/shared/Login";
 import ErrorPage from "../pages/shared/ErrorPage";
