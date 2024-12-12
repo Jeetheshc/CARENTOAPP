@@ -15,16 +15,10 @@ connectDB();
 
 // Middleware
 app.use(express.json());
-app.use(
-    cors({
-        origin: [
-            
-            "https://carentoapp-git-master-jeethesh-cs-projects.vercel.app"
-          ],
-        credentials: true,
-        methods: ["GET","POST","PUT","DELETE"]
-    })
-);
+app.use(cors({
+    origin: 'http://localhost:5173', // Allow only frontend port
+    credentials: true, // Allow credentials (cookies, etc.)
+  }));
 app.use(cookieParser());
 
 app.get("/", (req, res) => {
