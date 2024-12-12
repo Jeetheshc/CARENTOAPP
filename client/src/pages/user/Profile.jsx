@@ -72,7 +72,7 @@ export const Profile = () => {
               <span className="">{profile.address.charAt(0).toUpperCase() + profile.address.slice(1).toLowerCase()}</span>
             </div>
             <div className="flex items-center">
-              <span className="font-medium text-blue-600 w-1/3">Status:</span>
+              <span className="font-medium text-blue-600 w-1/3">Status :</span>
               <span
                 className={`text-sm px-2 py-1 rounded ${
                   profile.isActive ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
