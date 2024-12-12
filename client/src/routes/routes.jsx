@@ -5,7 +5,7 @@ import { Cars } from "../pages/user/Cars";
 import { Contact } from "../pages/user/Contact";
 import { Home } from "../pages/user/Home";
 import { Profile } from "../pages/user/Profile";
-import { Profilechangepassword } from "../pages/user/profilechangepassword";
+import { Profilechangepassword } from "../pages/user/Profilechangepassword";
 import { ProfileChangePhoto } from "../pages/user/ProfileChangePhoto";
 import { ProfileDeactivate } from "../pages/user/ProfileDeactivate";
 import { UserLayout } from "../layout/userLayout";
