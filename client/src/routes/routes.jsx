@@ -22,6 +22,10 @@ import { Carlist } from "../pages/admin/Carlist";
 import { Addnewcar } from "../pages/admin/Addnewcar";
 import { CarDetailpage } from "../pages/admin/CarDetailpage";
 
+import { EditCar } from "../pages/admin/EditCar";
+
+
+
 
 
 export const router = createBrowserRouter([
@@ -126,7 +130,10 @@ export const router = createBrowserRouter([
                 path: "view-car/:id",
                 element: <CarDetailpage />,
             },
-            
+            {
+                path: "edit-car/:id",
+                element: <EditCar />,
+            },
             {
                 element: <AdminProtectedRoutes />,
                 path: "admin",

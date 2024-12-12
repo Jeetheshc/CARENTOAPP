@@ -78,8 +78,9 @@ export const addNewCar = async (req, res) => {
 export const editCarDetails = async (req, res) => {
   try {
     const { id } = req.params;
-    const { carNumber } = req.body;
+    const { carNumber, features, ...rest } = req.body;
 
+    // Check for duplicate car number
     if (carNumber) {
       const existingCar = await Car.findOne({ carNumber, _id: { $ne: id } });
       if (existingCar) {
@@ -87,9 +88,32 @@ export const editCarDetails = async (req, res) => {
       }
     }
 
-    const updatedData = req.body;
-    const car = await Car.findByIdAndUpdate(id, updatedData, { new: true });
+    // Handle feature parsing
+    const parsedFeatures = typeof features === "string" ? JSON.parse(features) : features;
 
+    // Handle image upload
+    let updatedCarImages;
+    if (req.file) {
+      try {
+        const base64Image = `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`;
+        const uploadResult = await cloudinaryInstance.uploader.upload(base64Image, {
+          folder: "car_images",
+        });
+        updatedCarImages = uploadResult.secure_url;
+      } catch (error) {
+        return res.status(500).json({ message: "Failed to upload car image", error: error.message });
+      }
+    }
+
+    // Prepare the updated data
+    const updatedData = {
+      ...rest,
+      features: parsedFeatures,
+      ...(updatedCarImages && { carImages: updatedCarImages }), // Update image if provided
+    };
+
+    // Update car data in the database
+    const car = await Car.findByIdAndUpdate(id, updatedData, { new: true });
     if (!car) {
       return res.status(404).json({ message: "Car not found" });
     }
@@ -99,7 +123,6 @@ export const editCarDetails = async (req, res) => {
     res.status(500).json({ message: error.message || "Internal server error" });
   }
 };
-
 // Deactivate car
 export const deactivateCar = async (req, res) => {
   try {
