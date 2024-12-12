@@ -15,7 +15,7 @@ function Header() {
                 <ul className='flex gap-5 px-4'>
                     <Link to={"/"}>Home</Link>
                     <Link to={"/about"}>About</Link>
-                    <Link to={"/cars"}>Cars</Link>
+                   
                     <Link to={"/contact"}>Contact Us</Link>
                    
                 </ul>

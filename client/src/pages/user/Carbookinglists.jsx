@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { axiosInstance } from "../../config/axiosInstance"; // Ensure this points to your Axios instance
 import { Link } from "react-router-dom";
 
-export const Carbookinglists = () => {
+export const Carbookinglists = ({ userId }) => { // Pass userId as prop from Profile page or use global state
   const [bookings, setBookings] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -11,7 +11,10 @@ export const Carbookinglists = () => {
     const fetchBookings = async () => {
       try {
         const response = await axiosInstance.get("/bookings"); // Replace with your actual endpoint
-        setBookings(response.data.data);
+        const filteredBookings = response.data.data.filter(
+          (booking) => booking.userId === userId // Filter bookings based on userId
+        );
+        setBookings(filteredBookings);
       } catch (err) {
         setError(err.response?.data?.message || "Failed to fetch bookings.");
       } finally {
@@ -20,7 +23,7 @@ export const Carbookinglists = () => {
     };
 
     fetchBookings();
-  }, []);
+  }, [userId]);
 
   const formatDate = (date) =>
     new Date(date).toLocaleString(undefined, {
@@ -125,12 +128,11 @@ export const Carbookinglists = () => {
               {/* Buttons placed at the bottom */}
               <div className="flex flex-col gap-2 mt-4 w-full md:w-auto">
                 {/* Show Details Button */}
-              
-                <Link to={`/bookings/${booking?._id}`} className="w-full">
-                        <button className="btn btn-primary w-full py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-300">
-                            Show Details
-                        </button>
-                    </Link>
+                <Link to={`/user/bookings/${booking?._id}`} className="w-full">
+                  <button className="btn btn-primary w-full py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-300">
+                    Show Details
+                  </button>
+                </Link>
 
                 {/* Cancel Button (if not already cancelled) */}
                 {booking.status !== "Cancelled" && (

@@ -80,19 +80,43 @@ export const getBookings = async (req, res) => {
 
 // Get a booking by ID
 export const getBookingById = async (req, res) => {
-    try {
-        const { id } = req.params;
+  try {
+      const { id } = req.params;
 
-        const booking = await Booking.findById(id).populate("carId userId");
-        if (!booking) {
-            return res.status(404).json({ message: "Booking not found" });
-        }
+      const booking = await Booking.findById(id)
+          .populate({
+              path: "carId",
+              populate: {
+                  path: "provider", // Populates the provider field in the car document
+              },
+          })
+          .populate("userId"); // Populate user details if needed
 
-        res.json({ message: "Booking retrieved successfully", data: booking });
-    } catch (error) {
-        res.status(500).json({ message: error.message || "Internal Server Error" });
-    }
+      if (!booking) {
+          return res.status(404).json({ message: "Booking not found" });
+      }
+
+      res.json({ message: "Booking retrieved successfully", data: booking });
+  } catch (error) {
+      res.status(500).json({ message: error.message || "Internal Server Error" });
+  }
 };
+
+
+// export const getBookingById = async (req, res) => {
+//     try {
+//         const { id } = req.params;
+
+//         const booking = await Booking.findById(id).populate("carId userId");
+//         if (!booking) {
+//             return res.status(404).json({ message: "Booking not found" });
+//         }
+
+//         res.json({ message: "Booking retrieved successfully", data: booking });
+//     } catch (error) {
+//         res.status(500).json({ message: error.message || "Internal Server Error" });
+//     }
+// };
 
 // Cancel a booking
 // export const cancelBooking = async (req, res) => {
@@ -133,6 +157,47 @@ export const cancelBooking = async (req, res) => {
       await booking.save();
   
       res.json({ message: "Booking cancelled successfully", data: booking });
+    } catch (error) {
+      res.status(500).json({ message: error.message || "Internal Server Error" });
+    }
+  };
+  
+
+
+
+
+  export const getAvailableCars = async (req, res) => {
+    try {
+      const { fromDate, toDate, location } = req.body;
+  
+      if (!fromDate || !toDate) {
+        return res.status(400).json({ message: "fromDate and toDate are required" });
+      }
+  
+      const from = new Date(fromDate);
+      const to = new Date(toDate);
+  
+      if (from > to) {
+        return res.status(400).json({ message: "Invalid date range" });
+      }
+  
+      // Fetch all booked cars within the given range
+      const bookedCarIds = await Booking.find({
+        $or: [
+          { fromTime: { $lte: to }, toTime: { $gte: from } },
+        ],
+      }).distinct("carId");
+  
+      // Fetch cars that are not booked in the given range and optionally match the location
+      const query = {
+        _id: { $nin: bookedCarIds },
+      };
+      if (location) {
+        query.location = location;
+      }
+  
+      const availableCars = await Car.find(query);
+      res.json({ message: "Available cars retrieved successfully", data: availableCars });
     } catch (error) {
       res.status(500).json({ message: error.message || "Internal Server Error" });
     }

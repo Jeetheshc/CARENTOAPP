@@ -1,8 +1,9 @@
 
 import User from "../models/userModel.js";
 import bcrypt from "bcrypt";
-import { generateToken } from "../utils/token.js"; 
+import { generateToken } from "../utils/token.js";
 import { cloudinaryInstance } from "../config/cloudinary.js";
+
 
 export const userSignup = async (req, res) => {
     try {
@@ -19,9 +20,24 @@ export const userSignup = async (req, res) => {
 
         const hashedPassword = bcrypt.hashSync(password, 10);
 
-        // Check if a profile picture was uploaded
-        const profilePic = req.file ? req.file.path : "https://via.placeholder.com/150/000000/FFFFFF/?text=Profile";
+        // Upload profile photo to Cloudinary if provided
+        let profilePic;
 
+        if (req.file) {
+            // Convert the file buffer to a base64 string for upload
+            const fileBase64 = `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`;
+
+            try {
+                const uploadResult = await cloudinaryInstance.uploader.upload(fileBase64, {
+                    folder: "profile_pics", // Specify the folder in Cloudinary
+                });
+                profilePic = uploadResult.secure_url; // Store the URL of the uploaded image
+            } catch (error) {
+                return res.status(500).json({ message: "Failed to upload profile picture", error: error.message });
+            }
+        } else {
+            profilePic = "https://via.placeholder.com/150/000000/FFFFFF/?text=Profile";
+        }
         const newUser = new User({ name, email, password: hashedPassword, phone, address, profilePic });
         await newUser.save();
 
@@ -33,6 +49,35 @@ export const userSignup = async (req, res) => {
         res.status(500).json({ message: error.message || "Internal server error" });
     }
 };
+// export const userSignup = async (req, res) => {
+//     try {
+//         const { name, email, password, phone, address } = req.body;
+
+//         if (!name || !email || !password || !phone || !address) {
+//             return res.status(400).json({ message: "All fields are required" });
+//         }
+
+//         const userExist = await User.findOne({ email });
+//         if (userExist) {
+//             return res.status(400).json({ message: "User already exists" });
+//         }
+
+//         const hashedPassword = bcrypt.hashSync(password, 10);
+
+//         // Check if a profile picture was uploaded
+//         const profilePic = req.file ? req.file.path : "https://via.placeholder.com/150/000000/FFFFFF/?text=Profile";
+
+//         const newUser = new User({ name, email, password: hashedPassword, phone, address, profilePic });
+//         await newUser.save();
+
+//         const token = generateToken(newUser, "user");
+//         res.cookie("token", token);
+
+//         res.status(201).json({ message: "User created successfully" });
+//     } catch (error) {
+//         res.status(500).json({ message: error.message || "Internal server error" });
+//     }
+// };
 
 
 export const userLogin = async (req, res) => {
@@ -57,7 +102,7 @@ export const userLogin = async (req, res) => {
             return res.status(400).json({ message: "Incorrect password" });
         }
 
-      
+
 
         const token = generateToken(userExist, 'user');
         res.cookie('token', token);
@@ -70,12 +115,12 @@ export const userLogin = async (req, res) => {
 
 export const userProfile = async (req, res, next) => {
     try {
-        
-     const userId =req.user.id;
-     const userProfile = await User.findById(userId).select("-password");
+
+        const userId = req.user.id;
+        const userProfile = await User.findById(userId).select("-password");
 
 
-        res.json({ message: "user login successfully", data:userProfile });
+        res.json({ message: "user login successfully", data: userProfile });
     } catch (error) {
         res.status(error.statusCode || 500).json({ message: error.message || "Internal server error" });
     }
@@ -163,9 +208,9 @@ export const changeProfilePhoto = async (req, res) => {
             { new: true }
         ).select("-password");
 
-        res.status(200).json({ 
-            message: "Profile picture updated successfully", 
-            data: updatedUser 
+        res.status(200).json({
+            message: "Profile picture updated successfully",
+            data: updatedUser
         });
     } catch (error) {
         console.error(error);

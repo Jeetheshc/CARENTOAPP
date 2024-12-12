@@ -15,14 +15,11 @@ export const Login = ({ role = "user" }) => {
         signup_route: "/signup",
     };
 
-    if (role === "provider") {
-        user.role = "provider";
-        (user.login_api = "/provider/login"), (user.profile_route = "/provider/profile"), (user.signup_route = "/provider/signup");
-    }
+    
 
     if (role === "admin") {
         user.role = "admin";
-        (user.login_api = "/admin/login"), (user.profile_route = "/admin/profile"), (user.signup_route = "/admin/signup");
+        (user.login_api = "/admin/login"), (user.profile_route = "/admin"), (user.signup_route = "/admin/signup");
     }
 
 
@@ -86,6 +83,17 @@ export const Login = ({ role = "user" }) => {
                                 >
                                     New User? CLick to Register
                                 </Link>
+                                
+                            </label>
+                           
+                            <label className="label">
+                                <Link
+                                    to={"/admin/login"}
+                                    className="text-blue-500 hover:text-blue-700 transition-colors duration-200"
+                                >
+                                    Login as Admin
+                                </Link>
+                                
                             </label>
                         </div>
 

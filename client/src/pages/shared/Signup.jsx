@@ -1,35 +1,63 @@
-// signup.jsx
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { axiosInstance } from "../../config/axiosInstance";
 
-export const Signup = () => {
+export const Signup = ({ role = "user" }) => {
     const { register, handleSubmit } = useForm();
     const navigate = useNavigate();
+
+    // Configure role-specific routes
+    const user = {
+        role: "user",
+        signup_route: "/user/signup",
+        profile_route: "/user/profile",
+    };
+
+    if (role === "provider") {
+        user.role = "provider";
+        user.signup_route = "/provider/signup";
+        user.profile_route = "/provider/profile";
+    }
+
+    if (role === "admin") {
+        user.role = "admin";
+        user.signup_route = "/admin/signup";
+        user.profile_route = "/admin/profile";
+    }
 
     const onSubmit = async (data) => {
         try {
             const formData = new FormData();
+
+            // Append non-file fields
             Object.keys(data).forEach((key) => {
-                formData.append(key, data[key]);
+                if (key !== "profilePic") {
+                    formData.append(key, data[key]);
+                }
             });
 
+            // Append the profile picture file
+            if (data.profilePic && data.profilePic[0]) {
+                formData.append("profilePic", data.profilePic[0]);
+            }
+
+            // API call for signup
             const response = await axiosInstance({
                 method: "POST",
-                url: "/user/signup",
+                url: user.signup_route,
                 data: formData,
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
             });
 
-            toast.success("Signup successful");
-            navigate("/user/profile");
+            toast.success("Signup successful!");
+            navigate(user.profile_route);
         } catch (error) {
-            console.log(error);
-            toast.error(error.response?.data?.message || "Signup failed");
+            console.error(error);
+            toast.error(error.response?.data?.message || "Signup failed. Please try again.");
         }
     };
 
@@ -116,6 +144,7 @@ export const Signup = () => {
                                 type="file"
                                 {...register("profilePic")}
                                 className="file-input file-input-bordered file-input-green-500 w-full"
+                                accept="image/*"
                             />
                         </div>
 
@@ -124,6 +153,11 @@ export const Signup = () => {
                                 Sign Up
                             </button>
                         </div>
+                        <label className="label">
+                            <Link to="/login" className="label-text-alt link link-hover text-green-600">
+                                Already have an account? Login here.
+                            </Link>
+                        </label>
                     </form>
                 </div>
             </div>

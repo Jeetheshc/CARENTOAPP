@@ -5,7 +5,8 @@ import { useNavigate } from 'react-router-dom';
 
 export const Profile = () => {
   const [profile, isLoading, error] = useFetch('/user/profile');
-const navigate=useNavigate()
+  const navigate = useNavigate();
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-blue-50">
@@ -30,15 +31,14 @@ const navigate=useNavigate()
     );
   }
 
-  const userLogout=async()=>{
+  const userLogout = async () => {
     try {
-      const response = await axiosInstance({ method: "PUT", url:'/user/Logout'});
-    navigate('/')
-  
+      const response = await axiosInstance({ method: 'PUT', url: '/user/Logout' });
+      navigate('/');
     } catch (error) {
-      
+      console.error("Error during logout", error);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-blue-100 text-blue-900 dark:bg-base-100 dark:text-base-content flex items-center justify-center py-10">
@@ -83,19 +83,15 @@ const navigate=useNavigate()
             </div>
             <div className="flex items-center">
               <span className="font-medium text-blue-600 w-1/3">Created:</span>
-              <span className="">
-                {new Date(profile.createdAt).toLocaleDateString()}
-              </span>
+              <span className="">{new Date(profile.createdAt).toLocaleDateString()}</span>
             </div>
             <div className="flex items-center">
               <span className="font-medium text-blue-600 w-1/3">Updated:</span>
-              <span className="">
-                {new Date(profile.updatedAt).toLocaleDateString()}
-              </span>
+              <span className="">{new Date(profile.updatedAt).toLocaleDateString()}</span>
             </div>
           </div>
         </div>
-        <button className='btn btn-error' onClick={userLogout}>Logout</button>
+        <button className="btn btn-error" onClick={userLogout}>Logout</button>
       </div>
     </div>
   );

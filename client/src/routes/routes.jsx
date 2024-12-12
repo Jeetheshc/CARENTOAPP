@@ -1,8 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
-
 import { CarBookings } from "../pages/user/CarBookings";
-
-import  {CarDetails } from "../pages/user/CarDetails";
+import { CarDetails } from "../pages/user/CarDetails";
 import { Cars } from "../pages/user/cars";
 import { Contact } from "../pages/user/Contact";
 import { Home } from "../pages/user/Home";
@@ -12,14 +10,22 @@ import { ProfileChangePhoto } from "../pages/user/ProfileChangePhoto";
 import { ProfileDeactivate } from "../pages/user/ProfileDeactivate";
 import { UserLayout } from "../layout/userLayout";
 import { Signup } from "../pages/shared/Signup";
-import {Login} from "../pages/shared/Login";
+import { Login } from "../pages/shared/Login";
 import ErrorPage from "../pages/shared/ErrorPage";
 import About from "../pages/user/About";
-import { ProtectedRoutes } from "./ProtectedRoutes";
-import { ProviderLayout } from "../layout/ProviderLayout";
+import { AdminProtectedRoutes, ProtectedRoutes } from "./ProtectedRoutes";
 import { AdminLayout } from "../layout/AdminLayout";
 import { Carbookinglists } from "../pages/user/Carbookinglists";
 import { CarbookingDetails } from "../pages/user/CarbookingDetails";
+
+
+import { AdminAbout } from "../pages/admin/AdminAbout";
+import { AdminHome } from "../pages/admin/AdminHome";
+import { Carlist } from "../pages/admin/Carlist";
+import { Addnewcar } from "../pages/admin/Addnewcar";
+import { CarDetailpage } from "../pages/admin/CarDetailpage";
+
+
 
 export const router = createBrowserRouter([
     {
@@ -55,16 +61,16 @@ export const router = createBrowserRouter([
                 path: "contact",
                 element: <Contact />,
             },
-           
+
             {
                 element: <ProtectedRoutes />,
-              path:"user",
+                path: "user",
                 children:
                     [
-                       
+
                         {
                             path: "Carbookinglists",
-                            element: <Carbookinglists/>,
+                            element: <Carbookinglists />,
                         },
                         {
                             path: "profile",
@@ -97,131 +103,43 @@ export const router = createBrowserRouter([
 
         ]
     },
-    {
-        path: "provider",
-        element: <ProviderLayout />,
-        errorElement: <ErrorPage />,
-        children: [
-         
-            {
-                path: "signup",
-                element: <Signup/>,
-            },
-            {
-                path: "login",
-                element: <Login role="provider"/>,
-            },
-            {
-                path: "about",
-                element: <About />,
-            },
-            {
-                path: "carDetails/:id",
-                element: <CarDetails />,
-            },
-            {
-                path: "cars",
-                element: <Cars />,
-            },
-            {
-                path: "contact",
-                element: <Contact />,
-            },
-            {
-                element: <ProtectedRoutes />,
-              path:"user",
-                children:
-                    [
-                        {
-                            path: "carBookings",
-                            element: <CarBookings />,
-                        },
-                        {
-                            path: "Carbookinglists",
-                            element: <Carbookinglists />,
-                        },
-                        {
-                            path: "profile",
-                            element: <Profile />,
-                        },
-                        {
-                            path: "profileChangePassword",
-                            element: <Profilechangepassword />,
-                        },
-                        {
-                            path: "profileChangePhoto",
-                            element: <ProfileChangePhoto />,
-                        },
-                        {
-                            path: "profileDeactivate",
-                            element: <ProfileDeactivate />,
-                        },
-                    ]
 
-            },
-
-
-        ]
-    },
     {
         path: "admin",
         element: <AdminLayout />,
         errorElement: <ErrorPage />,
         children: [
-            
             {
-                path: "signup",
-                element: <Signup role="admin"/>,
+                path: "/admin",
+                element: <AdminHome />,
             },
             {
                 path: "login",
-                element: <Login role="admin"/>,
+                element: <Login role="admin" />,
             },
             {
-                path: "about",
-                element: <About />,
+                path: "carslist",
+                element: <Carlist />,
             },
             {
-                path: "carDetails/:id",
-                element: <CarDetails />,
+                path: "addcars",
+                element: <Addnewcar />,
             },
             {
-                path: "cars",
-                element: <Cars />,
+                path: "view-car/:id",
+                element: <CarDetailpage />,
             },
+            
             {
-                path: "contact",
-                element: <Contact />,
-            },
-            {
-                element: <ProtectedRoutes />,
-              path:"user",
+                element: <AdminProtectedRoutes />,
+                path: "admin",
                 children:
                     [
                         {
-                            path: "carBookings",
-                            element: <CarBookings />,
+                            path: "adminhome",
+                            element: <AdminHome />,
                         },
-                        {
-                            path: "Carbookinglists",
-                            element: <Carbookinglists />,
-                        },
-                        {
-                            path: "profile",
-                            element: <Profile />,
-                        },
-                        {
-                            path: "profileChangePassword",
-                            element: <Profilechangepassword />,
-                        },
-                        {
-                            path: "profileChangePhoto",
-                            element: <ProfileChangePhoto />,
-                        },
-                        {
-                            path: "profileDeactivate",
-                            element: <ProfileDeactivate />,
-                        },
+
                     ]
 
             },

@@ -1,41 +1,45 @@
 import React, { useEffect, useState } from 'react'
-import Header from '../components/user/Header'
-import Footer from '../components/user/Footer'
+
 import { Outlet, useLocation } from 'react-router-dom'
-import UserHeader from '../components/user/UserHeader'
+
 import { axiosInstance } from '../config/axiosInstance'
 import { useDispatch, useSelector } from 'react-redux'
-import { saveUserData } from '../redux/features/UserSlice'
+
+import { AdminLogoutHeader } from '../components/admin/AdminLogoutHeader'
+import { Footer } from '../components/admin/Footer'
+import { clearAdminData, saveAdminData } from '../redux/features/AdminSlice'
+import { AdminHeader } from '../components/admin/AdminHeader'
+
 
 export const AdminLayout = () => {
-    const { isUserAuth, userData } = useSelector((state) => state.user)
+    const { isAdminAuth, adminData } = useSelector((state) => state.admin)
     const dispatch = useDispatch();
     const location = useLocation();
 
-    const checkUser = async () => {
+    const checkAdmin = async () => {
         try {
             const response = await axiosInstance({
                 method: "GET",
-                url: "/user/check-user",
+                url: "/admin/check-admin",
             });
-            dispatch(saveUserData());
+            dispatch(saveAdminData());
         } catch (error) {
-            dispatch(clearUserData());
+            dispatch(clearAdminData());
             console.log(error);
         }
     };
 
 
-    console.log(isUserAuth, "userauth");
-    console.log(userData, "Userdata");
+    console.log(isAdminAuth, "adminauth");
+    console.log(adminData, "admindata");
     useEffect(() => {
-        checkUser();
+        checkAdmin();
     }, [location.pathname]);
 
 
     return (
         <div>
-            {isUserAuth ? <UserHeader /> : <Header />}
+                   {isAdminAuth ? <AdminHeader /> : <AdminLogoutHeader />}
             <div className='min-h-100'>
                 <Outlet />
                 <Footer />
