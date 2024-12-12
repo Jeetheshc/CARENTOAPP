@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import { CarBookings } from "../pages/user/CarBookings";
 import { CarDetails } from "../pages/user/CarDetails";
-import { Cars } from "../pages/user/cars";
+import { Cars } from "../pages/user/Cars";
 import { Contact } from "../pages/user/Contact";
 import { Home } from "../pages/user/Home";
 import { Profile } from "../pages/user/Profile";
@@ -17,9 +17,6 @@ import { AdminProtectedRoutes, ProtectedRoutes } from "./ProtectedRoutes";
 import { AdminLayout } from "../layout/AdminLayout";
 import { Carbookinglists } from "../pages/user/Carbookinglists";
 import { CarbookingDetails } from "../pages/user/CarbookingDetails";
-
-
-import { AdminAbout } from "../pages/admin/AdminAbout";
 import { AdminHome } from "../pages/admin/AdminHome";
 import { Carlist } from "../pages/admin/Carlist";
 import { Addnewcar } from "../pages/admin/Addnewcar";
