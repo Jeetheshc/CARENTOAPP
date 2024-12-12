@@ -16,7 +16,7 @@ connectDB();
 // Middleware
 app.use(express.json());
 app.use(cors({
-    origin: ["http://localhost:5173","https://carentoapp-git-master-jeethesh-cs-projects.vercel.app"] ,
+    origin: ["http://localhost:5173"] ,
     credentials: true, // Allow credentials (cookies, etc.)
   }));
 app.use(cookieParser());
