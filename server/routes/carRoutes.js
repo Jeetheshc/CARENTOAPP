@@ -14,7 +14,7 @@ router.get("/cars", getAllCar);
 router.get("/locations", getCarLocations);
 
 // Edit car details
-router.put("/edit/:id", editCarDetails);
+router.put("/edit/:id",upload.single("carImages"), editCarDetails);
 
 // Deactivate a car
 router.put("/deactivate/:id", deactivateCar);

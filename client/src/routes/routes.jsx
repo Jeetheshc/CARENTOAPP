@@ -23,6 +23,7 @@ import { Addnewcar } from "../pages/admin/Addnewcar";
 import { CarDetailpage } from "../pages/admin/CarDetailpage";
 
 import { EditCar } from "../pages/admin/EditCar";
+import { Userlist } from "../pages/admin/Userlist";
 
 
 
@@ -133,6 +134,10 @@ export const router = createBrowserRouter([
             {
                 path: "edit-car/:id",
                 element: <EditCar />,
+            },
+            {
+                path: "userlist",
+                element: <Userlist />,
             },
             {
                 element: <AdminProtectedRoutes />,

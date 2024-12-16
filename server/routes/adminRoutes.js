@@ -3,6 +3,7 @@ import express from "express";
 import { adminAuth } from "../middlewares/adminAuth.js";
 import { AdminLogin, AdminLogout, AdminProfile, AdminSignup, changeAdminPassword, changeAdminProfilePhoto,  checkAdmin, deactivateAdminAccount, updateAdminDetails } from "../controllers/adminControllers.js";
 import { upload } from "../middlewares/multer.js";
+import { getAllUsers, userProfile } from "../controllers/userControllers.js";
 
 const router = express.Router();
 
@@ -18,5 +19,6 @@ router.put('/logout', adminAuth, AdminLogout);
 router.get('/check-admin', adminAuth, checkAdmin);
 router.put('/reset-password', adminAuth, changeAdminPassword);
 router.delete('/delete-account', adminAuth, deactivateAdminAccount);
-
+router.get('/userlist', adminAuth, getAllUsers);
+router.get('/userdetails', adminAuth, userProfile);
 export { router as adminRouter };

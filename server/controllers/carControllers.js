@@ -1,5 +1,7 @@
 import Car from "../models/carModel.js";
 import { cloudinaryInstance } from "../config/cloudinary.js";
+import fs from 'fs';
+import path from 'path';
 
 // Get all cars
 export const getAllCar = async (req, res) => {
@@ -13,116 +15,218 @@ export const getAllCar = async (req, res) => {
 
 // Add a new car
 
+
+
+
 export const addNewCar = async (req, res) => {
   try {
-    const { admin, brand, model, year, pricePerDay, carType, features, location, carNumber, ownerDetails } = req.body;
-
-    // Validate required fields
-    if (!admin || !brand || !model || !year || !pricePerDay || !carType || !features || !location || !carNumber || !ownerDetails) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
-
-    // Check if carNumber is unique
-    const existingCar = await Car.findOne({ carNumber });
-    if (existingCar) {
-      return res.status(400).json({ message: "Car number already exists" });
-    }
-
-    // Ensure a file is uploaded
-    if (!req.file) {
-      return res.status(400).json({ message: "Car image is required" });
-    }
-
-    // Upload the image to Cloudinary
-    let carImages;
-    try {
-      const base64Image = `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`;
-      const uploadResult = await cloudinaryInstance.uploader.upload(base64Image, {
-        folder: "car_images", // Define a folder for car images in Cloudinary
-      });
-      carImages = uploadResult.secure_url; // Get the secure URL of the uploaded image
-    } catch (error) {
-      return res.status(500).json({ message: "Failed to upload car image", error: error.message });
-    }
-
-    // Parse features if sent as a JSON string
-    const parsedFeatures = typeof features === "string" ? JSON.parse(features) : features;
-
-    // Create a new car document
-    const newCar = new Car({
-      admin,
+    const {
       brand,
       model,
       year,
       pricePerDay,
       carType,
-      carImages, // Save the single Cloudinary URL
-      features: parsedFeatures,
+      features,
       location,
       carNumber,
+      "ownerDetails.name": ownerName,
+      "ownerDetails.mobileNumber": ownerMobileNumber,
+      "ownerDetails.email": ownerEmail,
+      "ownerDetails.address": ownerAddress,
+      "ownerDetails.aadharNumber": ownerAadharNumber,
+    } = req.body;
+
+    // Reconstruct ownerDetails
+    const ownerDetails = {
+      name: ownerName,
+      mobileNumber: ownerMobileNumber,
+      email: ownerEmail,
+      address: ownerAddress,
+      aadharNumber: ownerAadharNumber,
+    };
+
+    // Validate required fields
+    if (
+      !brand ||
+      !model ||
+      !year ||
+      !pricePerDay ||
+      !carType ||
+      !location ||
+      !carNumber ||
+      !ownerDetails.name ||
+      !ownerDetails.mobileNumber ||
+      !ownerDetails.email ||
+      !ownerDetails.address ||
+      !ownerDetails.aadharNumber
+    ) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    // Upload car images to Cloudinary if provided
+    let carImages;
+    if (req.file) {
+      const fileBase64 = `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`;
+      try {
+        const uploadResult = await cloudinaryInstance.uploader.upload(fileBase64, {
+          folder: "carImages", // Specify the folder in Cloudinary
+        });
+        carImages = uploadResult.secure_url; // Store the URL of the uploaded image
+      } catch (error) {
+        return res.status(500).json({ message: "Failed to upload picture", error: error.message });
+      }
+    }
+
+
+    const newCar = new Car({
+      brand,
+      model,
+      year,
+      pricePerDay,
+      carType,
+      features: features ? features.split(",") : [],
+      location,
+      carNumber,
+      carImages,
       ownerDetails,
     });
 
-    // Save the new car in the database
     await newCar.save();
-    res.status(201).json({ message: "Car added successfully", car: newCar });
+
+    res.status(201).json({ message: "Car added successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message || "Internal server error" });
   }
 };
 
 
+// export const editCarDetails = async (req, res) => {
+//   try {
+//     const { id } = req.params; // ID of the car to update
+//     const {
+//       admin,
+//       brand,
+//       model,
+//       year,
+//       pricePerDay,
+//       carType,
+//       features,
+//       location,
+//       carNumber,
+//       "ownerDetails.name": ownerName,
+//       "ownerDetails.mobileNumber": ownerMobileNumber,
+//       "ownerDetails.email": ownerEmail,
+//       "ownerDetails.address": ownerAddress,
+//       "ownerDetails.aadharNumber": ownerAadharNumber,
+//     } = req.body;
 
+//     // Reconstruct ownerDetails
+//     const ownerDetails = {
+//       name: ownerName,
+//       mobileNumber: ownerMobileNumber,
+//       email: ownerEmail,
+//       address: ownerAddress,
+//       aadharNumber: ownerAadharNumber,
+//     };
 
-// Edit car details
+//     // Check for duplicate car number (if updated)
+//     if (carNumber) {
+//       const existingCar = await Car.findOne({ carNumber, _id: { $ne: id } });
+//       if (existingCar) {
+//         return res.status(400).json({ message: "Car number already exists" });
+//       }
+//     }
+
+//     // Handle features parsing
+//     const parsedFeatures = typeof features === "string" ? JSON.parse(features) : features;
+
+//     // Handle image upload
+//     let carImages;
+//     if (req.file) {
+//       const fileBase64 = `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`;
+//       try {
+//         const uploadResult = await cloudinaryInstance.uploader.upload(fileBase64, {
+//           folder: "carImages",
+//         });
+//         carImages = uploadResult.secure_url;
+//       } catch (error) {
+//         return res.status(500).json({ message: "Failed to upload car image", error: error.message });
+//       }
+//     }
+
+//     // Construct updated data
+//     const updatedData = {
+//       admin,
+//       brand,
+//       model,
+//       year,
+//       pricePerDay,
+//       carType,
+//       features: parsedFeatures,
+//       location,
+//       carNumber,
+//       ownerDetails,
+//       ...(carImages && { carImages }), // Only include if new image uploaded
+//     };
+
+//     // Update car details
+//     const car = await Car.findByIdAndUpdate(id, updatedData, { new: true });
+//     if (!car) {
+//       return res.status(404).json({ message: "Car not found" });
+//     }
+
+//     res.status(200).json({ message: "Car details updated successfully", data: car });
+//   } catch (error) {
+//     res.status(500).json({ message: error.message || "Internal server error" });
+//   }
+// };
 export const editCarDetails = async (req, res) => {
   try {
-    const { id } = req.params;
-    const { carNumber, features, ...rest } = req.body;
-
-    // Check for duplicate car number
-    if (carNumber) {
-      const existingCar = await Car.findOne({ carNumber, _id: { $ne: id } });
-      if (existingCar) {
-        return res.status(400).json({ message: "Car number already exists" });
-      }
+    // Parse ownerDetails if it's a stringified object
+    if (req.body.ownerDetails) {
+      req.body.ownerDetails = JSON.parse(req.body.ownerDetails);
     }
 
-    // Handle feature parsing
-    const parsedFeatures = typeof features === "string" ? JSON.parse(features) : features;
-
-    // Handle image upload
-    let updatedCarImages;
+    let carImages;
     if (req.file) {
+      // If a new image is uploaded
+      console.log("Image loaded");
+
+      // Convert the image buffer to base64 for Cloudinary upload
+      const fileBase64 = `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`;
       try {
-        const base64Image = `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`;
-        const uploadResult = await cloudinaryInstance.uploader.upload(base64Image, {
-          folder: "car_images",
+        // Upload to Cloudinary
+        const uploadResult = await cloudinaryInstance.uploader.upload(fileBase64, {
+          folder: "carImages", // Specify the folder in Cloudinary
         });
-        updatedCarImages = uploadResult.secure_url;
+        carImages = uploadResult.secure_url; // URL of the uploaded image
       } catch (error) {
-        return res.status(500).json({ message: "Failed to upload car image", error: error.message });
+        return res.status(500).json({ message: "Failed to upload picture", error: error.message });
       }
     }
 
-    // Prepare the updated data
-    const updatedData = {
-      ...rest,
-      features: parsedFeatures,
-      ...(updatedCarImages && { carImages: updatedCarImages }), // Update image if provided
-    };
+    // Ensure carImages gets updated if a new image is uploaded, or keep the existing image
+    if (carImages) {
+      req.body.carImages = [carImages]; // Update with new image URL
+    }
 
-    // Update car data in the database
-    const car = await Car.findByIdAndUpdate(id, updatedData, { new: true });
-    if (!car) {
+    // Update the car details in the database
+    const updatedCar = await Car.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!updatedCar) {
       return res.status(404).json({ message: "Car not found" });
     }
 
-    res.status(200).json({ message: "Car updated successfully", data: car });
+    return res.status(200).json(updatedCar);  // Send back updated car data
   } catch (error) {
-    res.status(500).json({ message: error.message || "Internal server error" });
+    console.error(error);
+    return res.status(500).json({ message: "Failed to update car" });
   }
 };
+
 // Deactivate car
 export const deactivateCar = async (req, res) => {
   try {

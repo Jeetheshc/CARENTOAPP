@@ -126,6 +126,9 @@ export const userProfile = async (req, res, next) => {
     }
 };
 
+
+
+
 export const userLogout = (req, res) => {
     try {
         res.clearCookie('token');
@@ -236,6 +239,22 @@ export const deactivateAccount = async (req, res) => {
 
         res.clearCookie("token"); // Clear the auth token cookie
         res.json({ message: "Account deactivated successfully" });
+    } catch (error) {
+        res.status(500).json({ message: error.message || "Internal server error" });
+    }
+};
+
+
+export const getAllUsers = async (req, res) => {
+    try {
+        // Fetch all users from the database
+        const users = await User.find().select("-password"); // Exclude the password field for security reasons
+
+        if (!users || users.length === 0) {
+            return res.status(404).json({ message: "No users found" });
+        }
+
+        res.status(200).json({data:users});
     } catch (error) {
         res.status(500).json({ message: error.message || "Internal server error" });
     }
