@@ -19,7 +19,7 @@ app.use(
     cors({
         origin: ["http://localhost:5173","https://carentoapp-git-master-jeethesh-cs-projects.vercel.app"] ,
         credentials: true,
-        methods: ["GET","POST","PUT","DELETE"]
+        methods: ["GET","POST","PATCH","PUT","DELETE"]
     })
 );
 app.use(cookieParser());

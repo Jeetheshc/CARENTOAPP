@@ -51,6 +51,7 @@ export const Carlist = () => {
               <th className="px-4 py-2 text-left border-b">Year</th>
               <th className="px-4 py-2 text-left border-b">Added Date</th>
               <th className="px-4 py-2 text-left border-b">Location</th>
+              <th className="px-4 py-2 text-left border-b">Availability</th>
               <th className="px-4 py-2 text-left border-b">Car Image</th>
               <th className="px-4 py-2 text-left border-b">Actions</th>
             </tr>
@@ -65,6 +66,12 @@ export const Carlist = () => {
                 <td className="px-4 py-2 border-b">{car.year}</td>
                 <td className="px-4 py-2 border-b">{formatDate(car.createdAt)}</td>
                 <td className="px-4 py-2 border-b">{car.location}</td>
+                <td
+                  className="px-4 py-2 border-b"
+                  style={{ color: car.availability ? "green" : "red" }}
+                >
+                  {car.availability ? "Available" : "Not Available"}
+                </td>
                 <td className="px-4 py-2 border-b">
                   <img
                     src={car.carImages[0]}

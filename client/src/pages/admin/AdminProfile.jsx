@@ -1,81 +1,85 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { useFetch } from "../../hooks/useFetch"; // Import your custom hook
+import toast from "react-hot-toast"; 
 
-const AdminProfile = () => {
-  const [admin, setAdmin] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+export const AdminProfile = () => {
+    const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchAdminProfile = async () => {
-      try {
-        const response = await axios.get("/api/admin/profile"); // Adjust the endpoint if necessary
-        setAdmin(response.data.data);
-        setIsLoading(false);
-      } catch (err) {
-        setError(err.message);
-        setIsLoading(false);
-      }
-    };
+    // Use the useFetch hook to get the admin profile data
+    const [admin, isLoading, error] = useFetch(`/admin/profile/${id}`); // Make sure to adjust the API endpoint accordingly
 
-    fetchAdminProfile();
-  }, []);
+    // Handle error or no data case
+    if (error) {
+        toast.error(error.message || "Failed to fetch admin profile");
+    }
 
-  if (isLoading) {
-    return <div className="text-center text-xl">Loading...</div>;
-  }
+    // Handle redirection if no admin data is found
+    if (!isLoading && !admin) {
+        navigate("/login"); // Redirect to login if no profile is found
+        return null;
+    }
 
-  if (error) {
-    return <div className="text-center text-xl text-red-500">Error: {error}</div>;
-  }
+    return (
+        <div className="container mx-auto p-6">
+            {isLoading ? (
+                <div>Loading...</div> // Show loading text or spinner while fetching data
+            ) : (
+                <div className="bg-white p-6 rounded-lg shadow-lg">
+                    <h1 className="text-3xl font-semibold text-center text-indigo-700 mb-6">Admin Profile</h1>
 
-  return (
-    <div className="container mx-auto p-8">
-      <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-lg">
-        <div className="flex items-center space-x-4">
-          <img
-            src={admin.profilePic}
-            alt="Profile"
-            className="w-24 h-24 rounded-full border-4 border-blue-500"
-          />
-          <div>
-            <h1 className="text-3xl font-semibold text-gray-800">{admin.name}</h1>
-            <p className="text-gray-600">{admin.email}</p>
-            <p className="text-gray-600">{admin.phone}</p>
-            <p className="text-gray-600">Status: {admin.isActive ? "Active" : "Inactive"}</p>
-          </div>
+                    {/* Profile Picture */}
+                    <div className="text-center mb-6">
+                        <img
+                            src={admin.profilePic || "https://via.placeholder.com/150"}
+                            alt="Admin Profile"
+                            className="w-32 h-32 rounded-full mx-auto"
+                        />
+                    </div>
+
+                    {/* Profile Information */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label className="font-medium text-gray-700">Name</label>
+                            <div>{admin.name}</div>
+                        </div>
+
+                        <div>
+                            <label className="font-medium text-gray-700">Email</label>
+                            <div>{admin.email}</div>
+                        </div>
+
+                        <div>
+                            <label className="font-medium text-gray-700">Phone</label>
+                            <div>{admin.phone}</div>
+                        </div>
+
+                        <div>
+                            <label className="font-medium text-gray-700">Account Status</label>
+                            <div>{admin.isActive ? "Active" : "Inactive"}</div>
+                        </div>
+
+                        <div>
+                            <label className="font-medium text-gray-700">Created At</label>
+                            <div>{new Date(admin.createdAt).toLocaleDateString()}</div>
+                        </div>
+
+                        <div>
+                            <label className="font-medium text-gray-700">Updated At</label>
+                            <div>{new Date(admin.updatedAt).toLocaleDateString()}</div>
+                        </div>
+                    </div>
+
+                    <div className="text-center mt-6">
+                        <button
+                            onClick={() => navigate("/admin/edit-profile")} // Navigate to edit profile page
+                            className="bg-indigo-600 text-white p-3 rounded-md w-full sm:w-auto"
+                        >
+                            Edit Profile
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
-
-        <div className="mt-6">
-          <h2 className="text-xl font-semibold text-gray-800">Profile Information</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-            <div className="flex justify-between">
-              <span className="text-gray-600">Name</span>
-              <span className="text-gray-800">{admin.name}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-600">Email</span>
-              <span className="text-gray-800">{admin.email}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-600">Phone</span>
-              <span className="text-gray-800">{admin.phone}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-600">Status</span>
-              <span className="text-gray-800">{admin.isActive ? "Active" : "Inactive"}</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-6">
-          <button className="bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-700">
-            Edit Profile
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+    );
 };
-
-export default AdminProfile;

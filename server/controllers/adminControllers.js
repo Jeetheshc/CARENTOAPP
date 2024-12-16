@@ -3,6 +3,8 @@ import Admin from "../models/adminmodel.js";
 import bcrypt from "bcrypt";
 import { generateToken } from "../utils/token.js";
 import { cloudinaryInstance } from "../config/cloudinary.js";
+import User from "../models/userModel.js";
+import Booking from "../models/bookingmodel.js";
 
 export const AdminSignup = async (req, res) => {
     try {
@@ -65,19 +67,28 @@ export const AdminLogin = async (req, res) => {
         res.status(500).json({ message: error.message || "Internal server error" });
     }
 };
-
+// Controller for getting the admin profile
 export const AdminProfile = async (req, res, next) => {
     try {
-
+        // Get the Admin's ID from the authenticated user
         const AdminId = req.Admin.id;
+        
+        // Fetch the admin profile, excluding the password field
         const AdminProfile = await Admin.findById(AdminId).select("-password");
 
+        // If the admin is not found, return an error
+        if (!AdminProfile) {
+            return res.status(404).json({ message: "Admin not found" });
+        }
 
-        res.json({ message: "Admin login successfully", data: AdminProfile });
+        // Return the admin profile data
+        res.json({ message: "Admin profile fetched successfully", data: AdminProfile });
     } catch (error) {
+        // Handle any errors and send a response
         res.status(error.statusCode || 500).json({ message: error.message || "Internal server error" });
     }
 };
+
 
 export const AdminLogout = (req, res) => {
     try {
@@ -187,3 +198,75 @@ export const deactivateAdminAccount = async (req, res) => {
         res.status(500).json({ message: error.message || "Internal server error" });
     }
 };
+export const userProfile = async (req, res, next) => {
+    try {
+        const { id } = req.params; // Extracting 'id' from request parameters
+        const userProfile = await User.findById(id).select("-password"); // Using 'id'
+
+        if (!userProfile) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        res.json({ message: "User retrieved successfully", data: userProfile });
+    } catch (error) {
+        res.status(error.statusCode || 500).json({ message: error.message || "Internal server error" });
+    }
+};
+
+export const userEdit = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name, email, phone, address } = req.body;
+
+        // Ensure all required fields are present
+        if (!name || !email || !phone || !address) {
+            return res.status(400).json({ message: "All fields are required." });
+        }
+
+        // Check if the user exists
+        const user = await User.findById(id);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Email validation
+        if (email !== user.email) {
+            const emailExists = await User.findOne({ email });
+            if (emailExists) {
+                return res.status(400).json({ message: "Email already in use" });
+            }
+        }
+
+        // Update user details
+        user.name = name;
+        user.email = email;
+        user.phone = phone;
+        user.address = address;
+
+        await user.save();
+
+        res.status(200).json({ message: "User updated successfully", user });
+    } catch (error) {
+        res.status(500).json({ message: error.message || "Internal server error" });
+    }
+};
+export const cancelBooking = async (req, res) => {
+    try {
+      const { id } = req.params;
+  
+      // Find the booking by ID
+      const booking = await Booking.findById(id);
+      if (!booking) {
+        return res.status(404).json({ message: "Booking not found" });
+      }
+  
+    
+      // Update the booking status to 'Cancelled'
+      booking.status = "Cancelled";
+      await booking.save();
+  
+      res.json({ message: "Booking cancelled successfully", data: booking });
+    } catch (error) {
+      res.status(500).json({ message: error.message || "Internal Server Error" });
+    }
+  };

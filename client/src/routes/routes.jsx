@@ -24,6 +24,10 @@ import { CarDetailpage } from "../pages/admin/CarDetailpage";
 
 import { EditCar } from "../pages/admin/EditCar";
 import { Userlist } from "../pages/admin/Userlist";
+import { Userdetailpage } from "../pages/admin/Userdetailpage";
+import { Edituser } from "../pages/admin/Edituser";
+import { AdminProfile } from "../pages/admin/AdminProfile";
+import { Adminbooking } from "../pages/admin/Adminbooking";
 
 
 
@@ -98,6 +102,7 @@ export const router = createBrowserRouter([
                             path: "profileDeactivate",
                             element: <ProfileDeactivate />,
                         },
+                        
                     ]
 
             },
@@ -138,6 +143,22 @@ export const router = createBrowserRouter([
             {
                 path: "userlist",
                 element: <Userlist />,
+            },
+            {
+                path: "view-user/:id",
+                element: <Userdetailpage />,
+            },
+            {
+                path: "edit-user/:id",
+                element: <Edituser />,
+            },
+            {
+                path:"profile/:id",
+                element:<AdminProfile/>,
+            },
+            {
+                path:"bookings",
+                element:<Adminbooking/>,
             },
             {
                 element: <AdminProtectedRoutes />,

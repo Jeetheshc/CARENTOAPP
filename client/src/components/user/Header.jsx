@@ -6,7 +6,12 @@ function Header() {
     const navigate = useNavigate()
     return (
         <div className='bg-blue-100 text-blue-900 dark:bg-base-100 dark:text-base-content p-4 flex font-semibold py-4 px-4  items-center justify-between'>
-            <Link to={"/"}>CARENTO</Link>
+            <Link 
+      to={"/"} 
+      className="text-xl font-bold uppercase tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-green-500 animate-marquee"
+    >
+      CARENTO
+    </Link>
             <nav>
                 <ul className='flex gap-5 px-4'>
                     <Link to={"/"}>Home</Link>

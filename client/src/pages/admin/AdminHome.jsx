@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaCar, FaUsers } from 'react-icons/fa';
+import { FaCar, FaClipboardList, FaUsers } from 'react-icons/fa';
 
 export const AdminHome = () => {
   const navigate = useNavigate();
@@ -23,6 +23,13 @@ export const AdminHome = () => {
           >
             <FaUsers className="text-5xl mb-4" />
             <span className="text-lg font-semibold">User List</span>
+          </button>
+          <button
+            className="flex flex-col items-center px-8 py-6 bg-blue-500 text-white rounded-xl shadow-lg hover:bg-blue-600 transition-all duration-300 w-40 h-40"
+            onClick={() => navigate('/admin/bookings')}
+          >
+            <FaClipboardList className="text-5xl mb-4" /> {/* You can choose a suitable icon for bookings */}
+            <span className="text-lg font-semibold">Bookings</span>
           </button>
         </div>
       </div>

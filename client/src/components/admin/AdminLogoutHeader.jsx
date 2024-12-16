@@ -6,11 +6,12 @@ export const AdminLogoutHeader = () => {
     const navigate = useNavigate ()
   return (
     <div className='bg-blue-100 text-blue-900 dark:bg-base-100 dark:text-base-content p-4 flex font-semibold py-4 px-4  items-center justify-between'>
-            <Link to={"/admin"}>
-                <div>
-                    <img className='rounded-md shadow-md' src="src/assets/logo.png" alt="logo" />
-                </div>
-            </Link>
+             <Link 
+      to={"/admin"} 
+      className="text-xl font-bold uppercase tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-green-500 animate-marquee"
+    >
+      CARENTO
+    </Link>
             <nav>
                <h1 className="text-red-600">
                You are not authorised to use the URL

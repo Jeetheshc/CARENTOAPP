@@ -19,11 +19,12 @@ function UserHeader() {
     <div className=" w-full bg-base-100 text-base-content shadow-md z-50">
       <div className="container mx-auto flex items-center justify-between py-4 px-6">
         {/* Logo */}
-        <Link to={"/"}>
-          <div>
-            <img className='rounded-md shadow-md' src="src/assets/logo.png" alt="logo" />
-          </div>
-        </Link>
+        <Link 
+      to={"/"} 
+      className="text-xl font-bold uppercase tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-green-500 animate-marquee"
+    >
+      CARENTO
+    </Link>
 
         {/* Navigation Links */}
         <nav>

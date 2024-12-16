@@ -22,11 +22,11 @@ export const AdminProtectedRoutes = () => {
     const { isAdminAuth } = useSelector((state) => state.admin);
     const navigate = useNavigate();
 
-    useEffect(() => {
+   // useEffect(() => {
         if (!isAdminAuth) {
             navigate("/admin/login");
         }
-    }, [isAdminAuth, navigate]);
+   // }, [isAdminAuth, navigate]);
 
     return isAdminAuth ? <Outlet /> : null;
 };
