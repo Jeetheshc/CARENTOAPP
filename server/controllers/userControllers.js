@@ -42,7 +42,8 @@ export const userSignup = async (req, res) => {
         await newUser.save();
 
         const token = generateToken(newUser, "user");
-        res.cookie("token", token);
+        res.cookie("token", token,{sameSite:"None", secure:true});
+       // res.cookie("token", token);
 
         res.status(201).json({ message: "User created successfully" });
     } catch (error) {
@@ -105,7 +106,8 @@ export const userLogin = async (req, res) => {
 
 
         const token = generateToken(userExist, 'user');
-        res.cookie('token', token);
+        res.cookie("token", token,{sameSite:"None", secure:true});
+       // res.cookie('token', token);
 
         res.json({ message: "User logged in successfully" });
     } catch (error) {
