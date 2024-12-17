@@ -17,7 +17,7 @@ connectDB();
 app.use(express.json());
 app.use(
     cors({
-        origin: ["http://localhost:5173","https://carentoapp-git-master-jeethesh-cs-projects.vercel.app"] ,
+        origin: ["http://localhost:5173","https://carentoapp-3ngzapr8n-jeethesh-cs-projects.vercel.app"] ,
         credentials: true,
         methods: ["GET","POST","PATCH","PUT","DELETE"]
     })
