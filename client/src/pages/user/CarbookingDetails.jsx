@@ -62,7 +62,7 @@ export const CarbookingDetails = () => {
     <div className="p-4">
       <h2 className="text-2xl font-bold mb-4">Booking Details</h2>
 
-      <div className="bg-white shadow-md rounded-lg p-4 w-30">
+      <div className="bg-white shadow-md rounded-lg p-4 w-full max-w-3xl mx-auto">
         {/* Car Details */}
         <h3 className="text-lg font-semibold">Car Details</h3>
         {booking?.carId ? (
@@ -110,17 +110,14 @@ export const CarbookingDetails = () => {
         <p><strong>Total Price:</strong> Rs.{booking.totalPrice}</p>
         <p><strong>Status:</strong>{" "}
           <span
-            className={
-              booking.status === "Cancelled"
-                ? "text-red-500"
-                : "text-green-500"
-            }
+            className={booking.status === "Cancelled" ? "text-red-500" : "text-green-500"}
           >
             {booking.status}
           </span>
         </p>
       </div>
 
+      {/* Cancel Booking Button */}
       {booking.status !== "Cancelled" && (
         <button
           onClick={handleCancel}

@@ -34,8 +34,8 @@ export const CarDetailpage = () => {
 
     const formatDate = (date) => {
         const newDate = new Date(date);
-        const day = newDate.getDate().toString().padStart(2, '0');
-        const month = (newDate.getMonth() + 1).toString().padStart(2, '0');
+        const day = newDate.getDate().toString().padStart(2, "0");
+        const month = (newDate.getMonth() + 1).toString().padStart(2, "0");
         const year = newDate.getFullYear();
         return `${day}/${month}/${year}`;
     };
@@ -46,13 +46,29 @@ export const CarDetailpage = () => {
 
             <div className="bg-gradient-to-r from-indigo-500 to-blue-500 p-6 rounded-lg shadow-lg">
                 <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-3xl font-medium text-white">{car.brand} {car.model}</h2>
-                    <button
-                        className="bg-yellow-500 text-white py-2 px-6 rounded-lg transition-colors hover:bg-yellow-600"
-                        onClick={() => navigate(`/admin/edit-car/${car._id}`)}
-                    >
-                        Edit Car
-                    </button>
+                    <h2 className="text-3xl font-medium text-white">
+                        {car.brand} {car.model}
+                    </h2>
+                    <div>
+                        <button
+                            className="bg-yellow-500 text-white py-2 px-6 rounded-lg transition-colors hover:bg-yellow-600 mr-4"
+                            onClick={() => navigate(`/admin/edit-car/${car._id}`)}
+                        >
+                            Edit Car
+                        </button>
+                        <button
+                            className="bg-green-500 text-white py-2 px-6 rounded-lg transition-colors hover:bg-green-600 mr-4"
+                            onClick={() => navigate(`/admin/car-bookings/${car._id}`)}
+                        >
+                            Booking History
+                        </button>
+                        <button
+                            className="bg-red-500 text-white py-2 px-6 rounded-lg transition-colors hover:bg-blue-600"
+                            onClick={() => navigate(`/admin/reviews/${car._id}`)} // Navigate to review page
+                        >
+                            View Reviews.
+                        </button>
+                    </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
@@ -71,7 +87,6 @@ export const CarDetailpage = () => {
                             )}
                         </div>
                     </div>
-                    <p></p><p></p>
                     <div className="bg-white p-4 rounded-lg shadow-md">
                         <p className="font-medium text-gray-700">Car ID:</p>
                         <p>{car._id}</p>
@@ -132,8 +147,6 @@ export const CarDetailpage = () => {
                         <p className="font-medium text-gray-700">Owner Aadhar Number:</p>
                         <p>{car.ownerDetails?.aadharNumber}</p>
                     </div>
-
-
 
                     <div className="bg-white p-4 rounded-lg shadow-md">
                         <p className="font-medium text-gray-700">Features:</p>

@@ -6,6 +6,7 @@ import { carRouter } from "./carRoutes.js";
 import { carProviderRouter } from "./providerRoutes.js";
 import { bookingRouter } from "./bookingRoutes.js";
 import { reviewRouter } from "./reviewRoutes.js";
+import { paymentRouter } from "./paymentRoutes.js";
 
 // Import other routers if needed (e.g., carRouter, bookingRouter)
 
@@ -18,7 +19,7 @@ router.use('/car',carRouter)
 router.use('/provider',carProviderRouter)
 router.use('/bookings', bookingRouter);
 router.use('/review', reviewRouter)
-
+router.use('/payment', paymentRouter)
 // Export the main API router
 export { router as apiRouter };
 

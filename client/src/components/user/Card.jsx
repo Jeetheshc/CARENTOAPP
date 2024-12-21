@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"; 
+import { Link } from "react-router-dom";
 
 export const Card = ({ cars, bookingDetails }) => {
   const handleBookingClick = () => {
@@ -21,14 +21,16 @@ export const Card = ({ cars, bookingDetails }) => {
         </figure>
         <div className="card-body p-4">
           <h2 className="text-xl font-bold text-gray-800">{cars?.brand}</h2>
+          <h1 className="text-xl font-bold text-gray-800">{cars?.model}</h1>
           <p className="text-lg text-gray-600 font-semibold">
             Rs.{cars?.pricePerDay} / Day
           </p>
           <p className="text-lg text-gray-600 font-semibold">
             Pickup: {cars?.location}
           </p>
-          
-          <div className="card-actions mt-4">
+
+          <div className="card-actions mt-4 space-y-2">
+            {/* Booking Button */}
             <Link
               to={`/Car/${cars?._id}`}
               state={{ bookingDetails }}
@@ -39,6 +41,16 @@ export const Card = ({ cars, bookingDetails }) => {
             >
               <button className="btn btn-primary w-full py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-300">
                 Book
+              </button>
+            </Link>
+
+            {/* Review Button */}
+            <Link
+              to={`carreviews/${cars?._id}`}
+              className="w-full"
+            >
+              <button className="btn btn-secondary w-full py-2 rounded-lg bg-gray-600 text-white hover:bg-gray-700 transition-colors duration-300">
+                View Reviews
               </button>
             </Link>
           </div>

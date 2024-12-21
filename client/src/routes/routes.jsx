@@ -21,13 +21,21 @@ import { AdminHome } from "../pages/admin/AdminHome";
 import { Carlist } from "../pages/admin/Carlist";
 import { Addnewcar } from "../pages/admin/Addnewcar";
 import { CarDetailpage } from "../pages/admin/CarDetailpage";
-
 import { EditCar } from "../pages/admin/EditCar";
 import { Userlist } from "../pages/admin/Userlist";
 import { Userdetailpage } from "../pages/admin/Userdetailpage";
 import { Edituser } from "../pages/admin/Edituser";
 import { AdminProfile } from "../pages/admin/AdminProfile";
 import { Adminbooking } from "../pages/admin/Adminbooking";
+import { ProfileChangeDetails } from "../pages/user/ProfileChangeDetails";
+import { Paymentseccess } from "../pages/user/Paymentseccess";
+import { Paymentfailed } from "../pages/user/Paymentfailed";
+import { Bookingdetails } from "../pages/user/Bookingdetails";
+import { Carbookingdetails } from "../pages/admin/Carbookingdetails";
+import { CarReviewPage } from "../pages/admin/CarReviewPage";
+import { Adminuserbook } from "../pages/admin/Adminuserbook";
+import { Reviewentryform } from "../pages/user/Reviewentryform";
+import { Carreviews } from "../pages/user/Carreviews";
 
 
 
@@ -67,6 +75,11 @@ export const router = createBrowserRouter([
                 path: "contact",
                 element: <Contact />,
             },
+            {
+                path:"cars/carreviews/:id",
+                element:<Carreviews/>,
+            },
+            
 
             {
                 element: <ProtectedRoutes />,
@@ -95,14 +108,38 @@ export const router = createBrowserRouter([
                             element: <Profilechangepassword />,
                         },
                         {
-                            path: "profileChangePhoto",
+                            path: "change-profile-photo",
                             element: <ProfileChangePhoto />,
+                        },
+                        {
+                            path: "change-details",
+                            element: <ProfileChangeDetails />,
                         },
                         {
                             path: "profileDeactivate",
                             element: <ProfileDeactivate />,
                         },
-                        
+                        {
+                            path: "payment/success",
+                            element: <Paymentseccess />,
+                        },
+                        {
+                            path: "payment/cancel",
+                            element: <Paymentfailed />,
+                        },
+                        {
+                            path: "/user/bookdetails/:bookingId",
+                            element: <Bookingdetails/>,
+                        },
+                       
+                        {
+                            path: "reviewentry/:bookingId/:carId",
+                            element: <Reviewentryform />,
+                        },
+                        {
+                            path:"carreviews/:id",
+                            element:<Carreviews/>,
+                        }, 
                     ]
 
             },
@@ -160,6 +197,21 @@ export const router = createBrowserRouter([
                 path:"bookings",
                 element:<Adminbooking/>,
             },
+            {
+                path:"car-bookings/:id",
+                element:<Carbookingdetails/>,
+            },
+            {
+                path:"reviews/:id",
+                element:<CarReviewPage/>,
+            },
+            {
+                path:"userreviews/:id",
+                element:<Adminuserbook/>,
+            },
+            
+           
+          
             {
                 element: <AdminProtectedRoutes />,
                 path: "admin",

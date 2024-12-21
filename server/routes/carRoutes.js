@@ -1,6 +1,8 @@
 import express from "express";
 import { addNewCar, deactivateCar, editCarDetails, getAllCar, getCarLocations, showCarDetails, updateCarPhotos } from "../controllers/carControllers.js";
 import { upload } from "../middlewares/multer.js";
+import { adminAuth } from "../middlewares/adminAuth.js";
+import { getBookingDetails } from "../controllers/userControllers.js";
 
 const router = express.Router();
 
@@ -24,5 +26,7 @@ router.get("/:id", showCarDetails);
 
 // Update car photos
 router.put("/editphotos/:id", upload.array("carimages", 5), updateCarPhotos);
+
+
 
 export { router as carRouter };

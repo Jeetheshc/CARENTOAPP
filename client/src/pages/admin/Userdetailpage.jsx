@@ -102,6 +102,16 @@ export const Userdetailpage = () => {
                         <p>{formatDate(user.updatedAt)}</p>
                     </div>
                 </div>
+
+                {/* Add Bookings Button */}
+                <div className="mt-6 text-center">
+                    <button
+                        className="bg-green-500 text-white py-2 px-6 rounded-lg transition-colors hover:bg-green-600"
+                        onClick={() => navigate(`/admin/userreviews/${id}`)}
+                    >
+                        View Bookings
+                    </button>
+                </div>
             </div>
         </div>
     );

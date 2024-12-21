@@ -1,70 +1,141 @@
 import Booking from "../models/bookingmodel.js";
 import Car from "../models/carModel.js"; // Assuming you have a Car model
 
-// Create a new booking
+
 export const createBooking = async (req, res) => {
   try {
-    const {
-      carId,
-      userId,
-      bookingDate,
-      bookingTime,
-      location,
-      fromTime,
-      toTime,
-      paymentDateTime,
-      paymentMode,
-      totalAmountPaid
-    } = req.body;
+      const { carId, userId, fromDate, toDate, location, totalAmountPaid } = req.body;
 
-    // Validate required fields
-    if (!carId || !userId || !bookingDate || !bookingTime || !location || !fromTime || !toTime || !paymentDateTime || !paymentMode || !totalAmountPaid) {
-      return res.status(400).json({ message: "All fields are required" });
+      if (!carId || !userId || !fromDate || !toDate || !location || !totalAmountPaid) {
+          console.error('Missing required booking details:', req.body);
+          return res.status(400).json({ message: 'Missing required booking details' });
+      }
+
+      const newBooking = new Booking({
+          carId,
+          userId,
+          fromDate,
+          toDate,
+          location,
+          paymentDate: new Date(),
+          totalAmountPaid,
+      });
+
+      await newBooking.save();
+
+      res.status(201).json({ success: true, message: 'Booking created successfully', booking: newBooking });
+  } catch (error) {
+      console.error('Error creating booking:', error.message || error);
+      res.status(500).json({ message: 'Failed to create booking', error: error.message });
+  }
+};
+
+export const newbooking = async (req, res) => {
+  try {
+    const { carId, fromDate, toDate, location, paymentMode, totalAmountPaid } = req.body;
+    const userId = req.user.id;
+
+    console.log(carId, userId, fromDate, toDate, location, paymentMode, totalAmountPaid);
+
+    // Check if all required data is provided
+    if (!carId || !userId || !fromDate || !toDate || !location || !totalAmountPaid) {
+      return res.status(400).json({ message: "Missing required booking details" });
     }
 
-    // Validate payment mode
-    const validPaymentModes = ["Credit Card", "Debit Card", "UPI", "Cash"];
-    if (!validPaymentModes.includes(paymentMode)) {
-      return res.status(400).json({ message: "Invalid payment mode" });
+    // Convert fromDate and toDate to Date objects
+    const fromDateObj = new Date(fromDate);
+    const toDateObj = new Date(toDate);
+
+    if (isNaN(fromDateObj.getTime()) || isNaN(toDateObj.getTime())) {
+      return res.status(400).json({ message: "Invalid date format" });
     }
 
-    // Check if the car exists
-    const car = await Car.findById(carId);
-    if (!car) {
-      return res.status(404).json({ message: "Car not found" });
-    }
-
-    // Calculate total days and total price
-    const fromDate = new Date(fromTime);
-    const toDate = new Date(toTime);
-    const rentalDays = Math.ceil((toDate - fromDate) / (1000 * 60 * 60 * 24));
-    const totalPrice = rentalDays * car.pricePerDay;
-
-    if (totalPrice !== totalAmountPaid) {
-      return res.status(400).json({ message: "Total amount paid does not match calculated total price" });
-    }
-
-    // Create booking
+    // Create a new booking instance
     const newBooking = new Booking({
       carId,
       userId,
-      bookingDate,
-      bookingTime,
+      fromDate: fromDateObj,
+      toDate: toDateObj,
       location,
-      fromTime,
-      toTime,
-      paymentDateTime,
+      paymentDate: new Date(),
       paymentMode,
       totalAmountPaid,
-      totalPrice,
     });
 
-    await newBooking.save();
-    res.status(201).json({ message: "Booking created successfully", data: newBooking });
+    // Save the new booking to the database
+    const savedBooking = await newBooking.save();
+
+    // Send the response back with the saved booking data
+    res.status(201).json({ success: true, data: savedBooking });
   } catch (error) {
-    res.status(500).json({ message: error.message || "Internal Server Error" });
+    console.error("Error creating booking:", error.message);
+    res.status(500).json({ message: "Failed to create booking", error: error.message });
   }
 };
+// Create a new booking
+// export const createBooking = async (req, res) => {
+//   try {
+//     const {
+//       carId,
+//       userId,
+//       bookingDate,
+//       bookingTime,
+//       location,
+//       fromTime,
+//       toTime,
+//       paymentDateTime,
+//       paymentMode,
+//       totalAmountPaid
+//     } = req.body;
+
+//     // Validate required fields
+//     if (!carId || !userId || !bookingDate || !bookingTime || !location || !fromTime || !toTime || !paymentDateTime || !paymentMode || !totalAmountPaid) {
+//       return res.status(400).json({ message: "All fields are required" });
+//     }
+
+//     // Validate payment mode
+//     const validPaymentModes = ["Credit Card", "Debit Card", "UPI", "Cash"];
+//     if (!validPaymentModes.includes(paymentMode)) {
+//       return res.status(400).json({ message: "Invalid payment mode" });
+//     }
+
+//     // Check if the car exists
+//     const car = await Car.findById(carId);
+//     if (!car) {
+//       return res.status(404).json({ message: "Car not found" });
+//     }
+
+//     // Calculate total days and total price
+//     const fromDate = new Date(fromTime);
+//     const toDate = new Date(toTime);
+//     const rentalDays = Math.ceil((toDate - fromDate) / (1000 * 60 * 60 * 24));
+//     const totalPrice = rentalDays * car.pricePerDay;
+
+//     if (totalPrice !== totalAmountPaid) {
+//       return res.status(400).json({ message: "Total amount paid does not match calculated total price" });
+//     }
+
+//     // Create booking
+//     const newBooking = new Booking({
+//       carId,
+//       userId,
+//       bookingDate,
+//       bookingTime,
+//       location,
+//       fromTime,
+//       toTime,
+//       paymentDateTime,
+//       paymentMode,
+//       totalAmountPaid,
+//       totalPrice,
+//     });
+
+//     await newBooking.save();
+//     res.status(201).json({ message: "Booking created successfully", data: newBooking });
+//   } catch (error) {
+//     res.status(500).json({ message: error.message || "Internal Server Error" });
+//   }
+// };
 
 
 
@@ -203,5 +274,60 @@ export const getAvailableCars = async (req, res) => {
     res.json({ message: "Available cars retrieved successfully", data: availableCars });
   } catch (error) {
     res.status(500).json({ message: error.message || "Internal Server Error" });
+  }
+};
+
+export const getCarBookings = async (req, res) => {
+  const { id } = req.params; // Car ID from the request parameters
+
+  try {
+    // Fetch car details
+    const car = await Car.findById(id);
+
+    if (!car) {
+      return res.status(404).json({ message: "Car not found." });
+    }
+
+    // Fetch booking details related to the car
+    const bookings = await Booking.find({ carId: id })
+      .populate("userId", "name email phone address profilePic") // Populate user details
+      .select(
+        "fromDate toDate location paymentDate paymentMode totalAmountPaid status bookingDate"
+      );
+
+    res.status(200).json({
+      data: {
+        car,        // Car details
+        bookings,   // Booking details
+      },
+    });
+  } catch (error) {
+    console.error("Error fetching car details with bookings:", error.message);
+    res.status(500).json({ message: "Server error. Please try again later." });
+  }
+};
+
+export const getBookingsForUser = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    console.log(`Fetching bookings for userId: ${userId}`);
+
+    // Fetch bookings by userId and populate car details (brand, model, year, carImages, location)
+    const bookings = await Booking.find({ userId })
+      .populate("carId", "brand model year carImages location") // Populate car details
+      .exec();
+
+    // Check if there are no bookings for the user
+    if (!bookings || bookings.length === 0) {
+      return res.status(200).json({ message: "No reviews found for this car.", data: [] });
+  }
+    // Send the bookings data if available
+    res.status(200).json({ data: bookings });
+  } catch (error) {
+    // Log the actual error for debugging purposes
+    console.error("No bookings:", error);
+
+    // If the error isn't related to empty bookings, show a different error message
+    res.status(500).json({ message: "An error occurred while fetching bookings." });
   }
 };

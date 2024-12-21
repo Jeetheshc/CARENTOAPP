@@ -80,8 +80,10 @@ export const Adminbooking = () => {
               </p>
               <p className="text-sm text-gray-600">Payment Mode: {booking?.paymentMode}</p>
               <p className="text-sm text-gray-600">
-                Payment Date: {new Date(booking?.paymentDateTime).toLocaleDateString()}
+                Payment Date: {booking?.paymentDateTime}
               </p>
+              <p className="text-sm text-gray-600">User: {booking?.userId?.email}</p>
+              <p className="text-sm text-gray-600">Phone: {booking?.userId?.phone}</p>
 
               {/* Cancel Booking Button */}
               {booking?.status === "Booked" && (
