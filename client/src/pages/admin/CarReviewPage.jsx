@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { axiosInstance } from "../../config/axiosInstance"; // Assuming axiosInstance is configured
+import { axiosInstance } from "../../config/axiosInstance"; 
 
 export const CarReviewPage = () => {
     const { id } = useParams(); // Car ID

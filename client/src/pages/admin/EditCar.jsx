@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { useFetch } from "../../hooks/useFetch"; // Custom hook for fetching data
 import { SkeletonLoader } from "../../components/admin/SkeletonLoader";
 import toast from "react-hot-toast";
