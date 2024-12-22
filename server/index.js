@@ -15,14 +15,19 @@ connectDB();
 
 // Middleware1
 app.use(express.json());
-app.use(
-    cors({
-        
-        origin: ["http://localhost:5173","https://carentoapp-git-master-jeethesh-cs-projects.vercel.app"] ,
-        credentials: true,
-        methods: ["GET","POST","PATCH","PUT","DELETE"]
-    })
-);
+app.use(cors({
+    origin: (origin, callback) => {
+        console.log("Origin:", origin); // Logs the origin
+        const allowedOrigins = ["http://localhost:5173", "https://carentoapp.vercel.app"];
+        if (allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PATCH", "PUT", "DELETE"]
+}));
 app.use(cookieParser());
 
 app.get("/", (req, res) => {
