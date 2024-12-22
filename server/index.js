@@ -15,24 +15,14 @@ connectDB();
 
 // Middleware1
 app.use(express.json());
-// CORS middleware setup
 app.use(
     cors({
-        origin: ["http://localhost:5173", "https://carentoapp.vercel.app"],
+        
+        origin: ["http://localhost:5173","https://carentoapp.vercel.app"] ,
         credentials: true,
-        methods: ["GET", "POST", "PATCH", "PUT", "DELETE"]
+        methods: ["GET","POST","PATCH","PUT","DELETE"]
     })
 );
-
-// Test route to verify CORS headers
-app.get('/test', (req, res) => {
-    res.setHeader("Access-Control-Allow-Origin", "https://carentoapp.vercel.app");
-    res.json({ message: "CORS test successful" });
-});
-
-// Main API Route
-app.use('/api', apiRouter);
-
 app.use(cookieParser());
 
 app.get("/", (req, res) => {

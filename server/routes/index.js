@@ -16,7 +16,6 @@ const router = express.Router();
 router.use('/user', userRouter); 
 router.use('/admin', adminRouter); 
 router.use('/car',carRouter)
-router.use('/provider',carProviderRouter)
 router.use('/bookings', bookingRouter);
 router.use('/review', reviewRouter)
 router.use('/payment', paymentRouter)
