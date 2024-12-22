@@ -16,18 +16,12 @@ connectDB();
 // Middleware1
 app.use(express.json());
 app.use(cors({
-    origin: (origin, callback) => {
-        console.log("Origin:", origin); // Logs the origin
-        const allowedOrigins = ["http://localhost:5173", "https://carentoapp.vercel.app"];
-        if (allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error("Not allowed by CORS"));
-        }
-    },
+    origin: ["http://localhost:5173", "https://carentoapp.vercel.app"],
     credentials: true,
     methods: ["GET", "POST", "PATCH", "PUT", "DELETE"]
 }));
+
+app.options("*", cors()); // Handle preflight requests
 app.use(cookieParser());
 
 app.get("/", (req, res) => {
