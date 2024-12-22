@@ -6,21 +6,17 @@ export const Home = () => {
   const [cars, setCars] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [locations, setLocations] = useState([]); // For location list
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
   const carsPerPage = 15; // Limit to 15 cars per page
 
-  // Fetch cars and locations on component mount
+  // Fetch cars on component mount
   useEffect(() => {
     const fetchCarsAndLocations = async () => {
       try {
         const carsResponse = await axiosInstance.get("car/cars");
-        const locationsResponse = await axiosInstance.get("car/locations");
-
         setCars(carsResponse.data.data);
-        setLocations(locationsResponse.data.data); // Store locations
         setIsLoading(false);
       } catch (err) {
         setError(err.message);
