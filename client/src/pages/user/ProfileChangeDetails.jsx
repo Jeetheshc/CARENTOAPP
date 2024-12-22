@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useFetch } from '../../hooks/useFetch';
 import { axiosInstance } from '../../config/axiosInstance';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 export const ProfileChangeDetails = () => {
   const [profile, isLoading, error] = useFetch('/user/profile'); // Fetch current profile details
@@ -33,7 +34,7 @@ export const ProfileChangeDetails = () => {
       const updatedData = { name, email, address, phone };
       const response = await axiosInstance.put('/user/profile-update', updatedData);
 
-      alert('Profile updated successfully!');
+      toast.success("Profile updated successfully!");
       navigate('/user/profile'); // Redirect to the profile page
     } catch (err) {
       setErrorMessage(err.response?.data?.message || 'Failed to update profile');
@@ -59,8 +60,8 @@ export const ProfileChangeDetails = () => {
   }
 
   return (
-    <div className="min-h-screen bg-blue-50 flex items-center justify-center py-10">
-      <div className="card w-full max-w-md bg-white shadow-lg p-6 rounded-md">
+    <div className="min-h-screen dark:bg-base-100 dark:text-base-content bg-blue-50 flex items-center justify-center py-10">
+      <div className="card w-full max-w-md dark:bg-base-100 dark:text-base-content bg-white shadow-lg p-6 rounded-md">
         <h2 className="text-2xl font-bold text-center text-blue-600 mb-4">Update Profile</h2>
 
         {/* Error message */}

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useFetch } from '../../hooks/useFetch';
 import { axiosInstance } from '../../config/axiosInstance';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 export const ProfileChangePhoto = () => {
   const [profile, isLoading, error] = useFetch('/user/profile'); // Fetch current profile details
@@ -40,7 +41,7 @@ export const ProfileChangePhoto = () => {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
-      alert('Profile photo updated successfully!');
+      toast.success("Profile photo updated successfully!");
       navigate('/user/profile');
     } catch (err) {
       console.error(err);
@@ -67,8 +68,8 @@ export const ProfileChangePhoto = () => {
   }
 
   return (
-    <div className="min-h-screen bg-blue-50 flex items-center justify-center">
-      <div className="card w-full max-w-md p-6 bg-white shadow-lg rounded-md">
+    <div className="min-h-screen dark:bg-base-100 dark:text-base-content bg-blue-50 flex items-center justify-center">
+      <div className="card w-full max-w-md p-6 dark:bg-base-100 dark:text-base-content bg-white shadow-lg rounded-md">
         <h2 className="text-2xl font-bold text-center text-blue-600 mb-4">Change Profile Photo</h2>
 
         {/* Current Profile Photo */}

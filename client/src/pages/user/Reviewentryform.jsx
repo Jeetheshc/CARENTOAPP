@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { axiosInstance } from "../../config/axiosInstance";
+import toast from "react-hot-toast";
 
 export const Reviewentryform = () => {
   const { bookingId, carId } = useParams(); // Get bookingId and carId from URL
@@ -41,7 +42,7 @@ export const Reviewentryform = () => {
         rating,
         reviewText,
       });
-      alert("Review added successfully!");
+      toast.success("Review added successfully!");
       navigate(`/user/Carbookinglists`); // Redirect to bookings or the relevant page
     } catch (error) {
       setError(error.response?.data?.message || "Error submitting review.");

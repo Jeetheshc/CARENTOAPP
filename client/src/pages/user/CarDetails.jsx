@@ -4,6 +4,7 @@ import { useFetch } from "../../hooks/useFetch";
 import { ProductSkelton } from "../../components/user/Skelton";
 import { axiosInstance } from "../../config/axiosInstance";
 import { loadStripe } from "@stripe/stripe-js";
+import toast from "react-hot-toast";
 export const CarDetails = () => {
   const { id } = useParams();
   const locationState = useLocation().state;
@@ -127,7 +128,7 @@ export const CarDetails = () => {
       const response = await axiosInstance.post("/bookings/create", bookingData);
   
       if (response.status === 201) {
-        alert("Booking confirmed!");
+        toast.success("Booking Confirmed !");
         navigate("/user/Carbookinglists");
       }
     } catch (error) {
@@ -137,11 +138,11 @@ export const CarDetails = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen p-4 bg-gray-100">
+    <div className="flex justify-center items-center dark:bg-base-100 dark:text-base-content min-h-screen p-4 bg-gray-100">
       {isLoading ? (
         <ProductSkelton />
       ) : (
-        <div className="flex flex-col md:flex-row bg-white shadow-lg rounded-lg w-full max-w-6xl p-6 gap-8">
+        <div className="flex flex-col md:flex-row dark:bg-base-100 dark:text-base-content bg-white shadow-lg rounded-lg w-full max-w-6xl p-6 gap-8">
           {/* Car Details */}
           <div className="flex-1">
             <img
@@ -187,13 +188,13 @@ export const CarDetails = () => {
 
             <div className="flex justify-end mt-auto gap-4">
               <button
-                className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-all"
+                className="px-6 py-2 bg-blue-500  text-white rounded-md hover:bg-blue-600 transition-all"
                 onClick={makePayment}
               >
                 Confirm Booking
               </button>
               <button
-                className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-all"
+                className="px-6 py-2 bg-blue-500  text-white rounded-md hover:bg-blue-600 transition-all"
                 onClick={handleConfirm}
               >
                  Booking
@@ -203,7 +204,7 @@ export const CarDetails = () => {
           
 
           {/* Provider Details */}
-          <div className="w-full md:w-1/3 bg-gray-50 shadow-md rounded-lg p-4">
+          <div className="w-full md:w-1/3 dark:bg-base-100 dark:text-base-content bg-gray-50 shadow-md rounded-lg p-4">
             <h3 className="text-lg font-semibold mb-4">Car Provider Details</h3>
             {Cars?.ownerDetails ? (
               <div className="flex flex-col items-center">

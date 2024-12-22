@@ -255,22 +255,40 @@ export const getAvailableCars = async (req, res) => {
       return res.status(400).json({ message: "Invalid date range" });
     }
 
-    // Fetch all booked cars within the given range
+    // Fetch all booked cars within the given range and ignore cancelled bookings
     const bookedCarIds = await Booking.find({
       $or: [
-        { fromTime: { $lte: to }, toTime: { $gte: from } },
+        { fromDate: { $lte: to }, toDate: { $gte: from }, status: { $ne: "Cancelled" } }, // Exclude cancelled bookings
       ],
     }).distinct("carId");
 
-    // Fetch cars that are not booked in the given range and optionally match the location
-    const query = {
-      _id: { $nin: bookedCarIds },
-    };
-    if (location) {
-      query.location = location;
-    }
+    // Fetch cars that are not booked in the given range
+    const query = { _id: { $nin: bookedCarIds }, availability: true }; // Include availability filter
+    if (location) query.location = location;
 
-    const availableCars = await Car.find(query);
+    const availableCars = await Car.aggregate([
+      { $match: query }, // Match cars that are available based on the filter
+      {
+        $lookup: {
+          from: "reviews", // MongoDB collection for reviews
+          localField: "_id",
+          foreignField: "carId",
+          as: "reviews",
+        },
+      },
+      {
+        $addFields: {
+          averageRating: {
+            $cond: {
+              if: { $gt: [{ $size: "$reviews" }, 0] }, // Check if there are reviews
+              then: { $avg: "$reviews.rating" }, // Calculate average rating
+              else: 0, // Default to 0 if no reviews
+            },
+          },
+        },
+      },
+    ]);
+
     res.json({ message: "Available cars retrieved successfully", data: availableCars });
   } catch (error) {
     res.status(500).json({ message: error.message || "Internal Server Error" });

@@ -32,41 +32,33 @@ export const Edituser = () => {
             setValue("address", user.address);
         }
     }, [user, setValue]);
-    
+
 
     const onSubmit = async (data) => {
-        console.log(data);
         try {
-            const updatedFormData = new FormData();
-            console.log(data);
-            // Append the form fields to the formData
-            updatedFormData.append("name", data.name);
-            updatedFormData.append("email", data.email);
-            updatedFormData.append("phone", data.phone);
-            updatedFormData.append("address", data.address);
-
-            console.log("Form Data (Before Sending):");
-            updatedFormData.forEach((value, key) => {
-                console.log(key, value);
-            });
-
-            // Make the API call to update the user data using axiosInstance
-            const response = await axiosInstance({
-                method: "PUT",
-                url: `admin/useredit/${id}`, // Use the user id to edit the specific user
-                data: updatedFormData,
+            // Prepare the data to be sent, including the isActive field
+            const updatedData = {
+                name: data.name,
+                email: data.email,
+                phone: data.phone,
+                address: data.address,
+                isActive: data.isActive,  // Include the isActive status
+            };
+    
+            // Make the API call to update the user data
+            const response = await axiosInstance.put(`admin/useredit/${id}`, updatedData, {
                 headers: {
-                    "Content-Type": "multipart/form-data",
+                    "Content-Type": "application/json",  // Ensure the correct content type
                 },
             });
-
+    
             toast.success("User updated successfully!");
             navigate(`/admin/view-user/${id}`);
         } catch (error) {
-            console.error(error);
             toast.error(error.response?.data?.message || "Failed to update user. Please try again.");
         }
     };
+    
 
     if (isLoadingData) {
         return <SkeletonLoader />;
@@ -90,11 +82,11 @@ export const Edituser = () => {
                     <div>
                         <label htmlFor="name" className="block font-medium text-gray-700">Name</label>
                         <input
-    id="name"
-    type="text"
-    className="w-full p-3 border border-gray-300 rounded-md"
-    {...register("name", { required: "Name is required" })}
-/>
+                            id="name"
+                            type="text"
+                            className="w-full p-3 border border-gray-300 rounded-md"
+                            {...register("name", { required: "Name is required" })}
+                        />
                     </div>
 
                     {/* User Email */}
@@ -127,6 +119,17 @@ export const Edituser = () => {
                             type="text"
                             className="w-full p-3 border border-gray-300 rounded-md"
                             {...register("address", { required: "Address is required" })}
+                        />
+                    </div>
+
+                    {/* User Active Status */}
+                    <div className="col-span-2">
+                        <label htmlFor="isActive" className="block font-medium text-gray-700">Is Active</label>
+                        <input
+                            id="isActive"
+                            type="checkbox"
+                            className="w-6 h-6"
+                            {...register("isActive")}
                         />
                     </div>
                 </div>

@@ -90,8 +90,11 @@ export const Cars = () => {
   };
 
   return (
+    
     <div className="p-4">
+      
       <div className="mb-6">
+        
         <h1 className="text-xl font-bold mb-4">Search Cars</h1>
         <div className="flex gap-4 flex-wrap">
           <input
@@ -149,7 +152,7 @@ export const Cars = () => {
             />
           ))
         ) : (
-          <p>No cars available for the selected criteria.</p>
+          <p className="text-red-700" >No cars available for the selected Date.</p>
         )}
       </div>
     </div>

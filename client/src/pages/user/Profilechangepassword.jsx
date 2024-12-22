@@ -50,8 +50,8 @@ export const Profilechangepassword = () => {
   };
 
   return (
-    <div className="min-h-screen bg-blue-100 text-blue-900 flex items-center justify-center py-10">
-      <div className="p-10 w-full max-w-md bg-white shadow-lg border border-blue-200 rounded-lg">
+    <div className="min-h-screen dark:bg-base-100 dark:text-base-content bg-blue-100 text-blue-900 flex items-center justify-center py-10">
+      <div className="p-10 w-full max-w-md dark:bg-base-100 dark:text-base-content bg-white shadow-lg border border-blue-200 rounded-lg">
         <h2 className="text-2xl font-bold text-blue-700 text-center mb-6">
           Change Password
         </h2>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useFetch } from "../../hooks/useFetch";
 import { SkeletonLoader } from "../../components/admin/SkeletonLoader";
+import { jsPDF } from "jspdf";
 
 export const Carbookingdetails = () => {
     const { id } = useParams(); // Car ID
@@ -35,11 +36,90 @@ export const Carbookingdetails = () => {
         return `${day}/${month}/${year}`;
     };
 
+    const generatePDF = () => {
+        const doc = new jsPDF();
+        doc.setFontSize(18);
+        doc.text(`Booking History for ${data.car.brand} ${data.car.model}`, 20, 20);
+    
+        // Car Details (Centered)
+        doc.setFontSize(12);
+        doc.text(`Car ID: ${data.car._id}`, 20, 30);
+        doc.text(`Brand: ${data.car.brand}`, 20, 40);
+        doc.text(`Model: ${data.car.model}`, 20, 50);
+        doc.text(`Year: ${data.car.year}`, 20, 60);
+        doc.text(`Color: ${data.car.color || "N/A"}`, 20, 70); // Handling undefined color
+        doc.text(`Price per Day: ${data.car.pricePerDay}`, 20, 80);
+        
+        // Adding space before booking details
+        let yPosition = 100;
+    
+        // Booking Status Summary Variables
+        let bookedTotal = 0;
+        let completedTotal = 0;
+        let cancelledTotal = 0;
+    
+        bookings.forEach((booking, index) => {
+            if (yPosition > 250) {
+                doc.addPage(); // If the content overflows, add a new page
+                yPosition = 20; // Reset Y position for new page
+            }
+    
+            // Booking Box - Left (Booking Details)
+            doc.setFillColor(240, 240, 240); // Light grey background for boxes
+            doc.rect(10, yPosition, 180, 70, 'F'); // Left box for booking details
+            doc.setTextColor(0);
+            doc.text(`Booking Date: ${formatDate(booking.bookingDate)}`, 20, yPosition + 10);
+            doc.text(`From: ${formatDate(booking.fromDate)}`, 20, yPosition + 20);
+            doc.text(`To: ${formatDate(booking.toDate)}`, 20, yPosition + 30);
+            doc.text(`Location: ${booking.location}`, 20, yPosition + 40);
+            doc.text(`Status: ${booking.status}`, 20, yPosition + 50);
+            doc.text(`Total Paid: ${booking.totalAmountPaid}`, 20, yPosition + 60);
+    
+            // Update the totals based on the booking status
+            if (booking.status === "Booked") bookedTotal += booking.totalAmountPaid;
+            if (booking.status === "Completed") completedTotal += booking.totalAmountPaid;
+            if (booking.status === "Cancelled") cancelledTotal += booking.totalAmountPaid;
+    
+           
+    
+            // Next booking
+            yPosition += 80; // Increase Y position for next booking
+    
+            // Handle new page if needed (every 3 bookings, for example)
+            if ((index + 1) % 3 === 0 && yPosition > 250) {
+                doc.addPage();
+                yPosition = 20;
+            }
+        });
+    
+        // Add a summary of total amounts at the end of the PDF
+        doc.setFontSize(14);
+        doc.setTextColor(0);
+        doc.text(`Total Amounts by Status:`, 20, yPosition + 20);
+        doc.text(`Booked: ${bookedTotal}`, 20, yPosition + 30);
+        doc.text(`Completed: ${completedTotal}`, 20, yPosition + 40);
+        doc.text(`Cancelled: ${cancelledTotal}`, 20, yPosition + 50);
+    
+        // Save the PDF with the car ID
+        doc.save(`booking_history_${data.car._id}.pdf`);
+    };
+    
+    
     return (
         <div className="container mx-auto p-6">
             <h1 className="text-4xl font-semibold text-center text-indigo-700 mb-6">
                 Booking History for {data.car.brand} {data.car.model}
             </h1>
+
+            {/* Generate Report Button */}
+            <div className="mb-6 text-center">
+                <button
+                    onClick={generatePDF}
+                    className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700"
+                >
+                    Generate Report (PDF)
+                </button>
+            </div>
 
             {/* Car Details */}
             <div className="bg-white p-6 rounded-lg shadow-md mb-6">

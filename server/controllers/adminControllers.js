@@ -216,10 +216,11 @@ export const userProfile = async (req, res, next) => {
 export const userEdit = async (req, res) => {
     try {
         const { id } = req.params;
-        const { name, email, phone, address } = req.body;
+        const { name, email, phone, address, isActive } = req.body;
 
         // Ensure all required fields are present
         if (!name || !email || !phone || !address) {
+            console.log(name, email, phone, address);
             return res.status(400).json({ message: "All fields are required." });
         }
 
@@ -242,6 +243,7 @@ export const userEdit = async (req, res) => {
         user.email = email;
         user.phone = phone;
         user.address = address;
+        user.isActive = isActive !== undefined ? isActive : user.isActive; // Update isActive if provided
 
         await user.save();
 

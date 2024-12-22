@@ -69,9 +69,9 @@ export const Profile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-blue-100 text-blue-900 flex items-center justify-center py-10">
+    <div className="min-h-screen bg-blue-100 dark:bg-base-100 dark:text-base-content text-blue-900 flex items-center justify-center py-10">
       {/* Profile Card */}
-      <div className="p-10 w-full max-w-md bg-white shadow-lg border border-blue-200 rounded-lg">
+      <div className="p-10 w-full max-w-md bg-white shadow-lg border dark:bg-base-100 dark:text-base-content border-blue-200 rounded-lg">
         {/* Profile Picture */}
         <div className="flex justify-center mt-6">
           <img

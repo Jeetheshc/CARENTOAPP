@@ -269,16 +269,27 @@ export const getAllUsers = async (req, res) => {
 
 export const getUserBookings = async (req, res) => {
     try {
-        
         const userId = req.user.id;
-       
-console.log(userId);
-        // Fetch bookings for the logged-in user and populate car details
-        const bookings = await Booking.find({userId})
-            .populate('carId');
 
+        // Fetch bookings for the logged-in user and populate car details
+        const bookings = await Booking.find({ userId })
+            .populate('carId')
+            .populate("userId", "name email phone address profilePic");
+
+        // If no bookings, send a 200 response with a message
         if (!bookings || bookings.length === 0) {
-            return res.status(404).json({ message: 'No bookings found' });
+            return res.status(200).json({ message: 'No bookings found' });
+        }
+
+        // Update booking status to "Completed" if the "toDate" has passed and the status is "Booked"
+        const currentDate = new Date();
+
+        for (let booking of bookings) {
+            const toDate = new Date(booking.toDate);
+            if (booking.status === 'Booked' && toDate <= currentDate) {
+                booking.status = 'Completed'; // Automatically mark as completed
+                await booking.save();
+            }
         }
 
         res.status(200).json({ success: true, data: bookings });
@@ -287,6 +298,9 @@ console.log(userId);
         res.status(500).json({ message: 'Failed to fetch bookings', error: error.message });
     }
 };
+
+
+
 export const getBookingDetails = async (req, res) => {
     try {
         const { bookingId } = req.params;

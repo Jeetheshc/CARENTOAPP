@@ -38,7 +38,7 @@ export const Login = ({ role = "user" }) => {
     };
 
     return (
-        <div className="hero bg-blue-50 min-h-screen">
+        <div className="hero bg-blue-50 dark:bg-base-100 dark:text-base-content min-h-screen">
             <div className="hero-content flex-col lg:flex-row-reverse">
                 {/* Text Section */}
                 <div className="text-center lg:text-left">
@@ -48,7 +48,7 @@ export const Login = ({ role = "user" }) => {
                 </div>
 
                 {/* Login Card */}
-                <div className="card bg-white w-full max-w-sm shrink-0 shadow-lg border border-blue-200">
+                <div className="card bg-white w-full max-w-sm shrink-0 shadow-lg border dark:bg-base-100 dark:text-base-content border-blue-200">
                     <form className="card-body" onSubmit={handleSubmit(onSubmit)}>
                         {/* Email Input */}
                         <div className="form-control">

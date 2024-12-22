@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export const Paymentfailed = () => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex flex-col items-center justify-center min-h-screen dark:bg-base-100 dark:text-base-content bg-gray-100">
       {/* Failure Message */}
       <h1 className="text-4xl font-bold text-red-600 mb-4">
         Payment Failed!
@@ -15,7 +15,7 @@ export const Paymentfailed = () => {
       {/* Navigation Button */}
       <Link
         to="/cars"
-        className="px-8 py-3 bg-blue-500 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-blue-600 transition-transform transform hover:scale-105"
+        className="px-8 py-3 bg-blue-500 dark:bg-base-100 dark:text-base-content text-white text-lg font-semibold rounded-lg shadow-md hover:bg-blue-600 transition-transform transform hover:scale-105"
       >
         Browse Cars
       </Link>

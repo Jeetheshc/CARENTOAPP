@@ -19,6 +19,8 @@ const carSchema = new mongoose.Schema(
       email: { type: String, required: true },
       address: { type: String, required: true },
       aadharNumber: { type: String, required: true },
+      bookingId: { type: mongoose.Schema.Types.ObjectId, ref: 'Booking' },
+      
     },
   },
   { timestamps: true }

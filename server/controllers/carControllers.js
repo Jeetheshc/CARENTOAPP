@@ -2,17 +2,39 @@ import Car from "../models/carModel.js";
 import { cloudinaryInstance } from "../config/cloudinary.js";
 import fs from 'fs';
 import path from 'path';
+import Review from "../models/reviewmodel.js";
+import Booking from "../models/bookingmodel.js";
 
 // Get all cars
 export const getAllCar = async (req, res) => {
   try {
-    const carsList = await Car.find();
-    res.json({ message: "Cars fetched successfully", data: carsList });
+    const carsList = await Car.find()
+      .populate({
+        path: 'ownerDetails.bookingId', // Populate single booking
+        model: 'Booking',
+        populate: { path: 'userId', select: 'name email' },
+      })
+      .lean();
+
+    for (const car of carsList) {
+      // Fetch reviews for the current car
+      const reviews = await Review.find({ carId: car._id }).populate('userId', 'name email');
+      car.reviews = reviews;
+
+      // Calculate the average rating
+      if (reviews.length > 0) {
+        const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+        car.averageRating = totalRating / reviews.length;
+      } else {
+        car.averageRating = 0; // Default to 0 if no reviews
+      }
+    }
+
+    res.json({ message: 'Cars fetched successfully', data: carsList });
   } catch (error) {
-    res.status(500).json({ message: error.message || "Internal server error" });
+    res.status(500).json({ message: error.message || 'Internal server error' });
   }
 };
-
 // Add a new car
 
 
